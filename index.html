@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacity - Farmácia Delivery</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="antialiased">
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center z-50">
+        <div class="w-16 h-16 border-4 border-t-primary border-r-primary border-b-transparent border-l-transparent rounded-full animate-spin mb-4"></div>
+        <p id="loadingMessage" class="text-white text-lg">Carregando produtos...</p>
+        <div id="loadingProgress" class="w-64 bg-gray-700 rounded-full h-2.5 mt-4">
+            <div class="bg-primary h-2.5 rounded-full" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <div class="flex items-center">
+            <i id="toastIcon" class="fas fa-check-circle mr-2"></i>
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-black bg-opacity-90 p-4 sticky top-0 z-40 shadow-lg backdrop-blur-sm">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <img src="https://placehold.co/40x40/E50914/FFFFFF?text=PH" alt="Logo" class="rounded-full mr-3">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Pharmacity</h1>
+            </div>
+            
+            <div class="relative w-full md:w-1/3 mx-4">
+                <input type="text" id="searchInput" placeholder="Buscar medicamentos..."
+                       class="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary border border-transparent focus:border-primary transition-all duration-300">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <button id="clearSearch" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white hidden">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <nav class="flex items-center space-x-4 mt-4 md:mt-0">
+                <button id="categoriesBtn" class="text-white hover:text-primary transition">
+                    <i class="fas fa-bars mr-1"></i> Categorias
+                </button>
+                <button id="userBtn" class="text-white hover:text-primary transition">
+                    <i class="fas fa-user"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Categories Dropdown -->
+    <div id="categoriesDropdown" class="hidden absolute top-full left-0 right-0 bg-gray-900 shadow-lg z-30 p-4">
+        <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <a href="#" class="category-chip bg-gray-800 hover:bg-primary text-white px-4 py-2 rounded-full text-sm transition flex items-center">
+                <i class="fas fa-pills mr-2"></i> Medicamentos
+            </a>
+            <a href="#" class="category-chip bg-gray-800 hover:bg-primary text-white px-4 py-2 rounded-full text-sm transition flex items-center">
+                <i class="fas fa-heart mr-2"></i> Vitaminas
+            </a>
+            <a href="#" class="category-chip bg-gray-800 hover:bg-primary text-white px-4 py-2 rounded-full text-sm transition flex items-center">
+                <i class="fas fa-soap mr-2"></i> Higiene
+            </a>
+            <a href="#" class="category-chip bg-gray-800 hover:bg-primary text-white px-4 py-2 rounded-full text-sm transition flex items-center">
+                <i class="fas fa-baby mr-2"></i> Infantil
+            </a>
+            <a href="#" class="category-chip bg-gray-800 hover:bg-primary text-white px-4 py-2 rounded-full text-sm transition flex items-center">
+                <i class="fas fa-band-aid mr-2"></i> Primeiros Socorros
+            </a>
+            <a href="#" class="category-chip bg-gray-800 hover:bg-primary text-white px-4 py-2 rounded-full text-sm transition flex items-center">
+                <i class="fas fa-prescription-bottle mr-2"></i> Genéricos
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Banner with Offers -->
+    <section class="relative h-80 md:h-96 bg-cover bg-center flex items-end" style="background-image: url('https://placehold.co/1200x500/1F1F1F/FFFFFF?text=OFERTAS+ESPECIAIS');">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+        <div class="container mx-auto z-10 p-6">
+            <div class="max-w-2xl">
+                <span class="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-2 inline-block">PROMOÇÃO</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Até 30% de desconto em medicamentos selecionados</h2>
+                <p class="text-gray-300 mb-4">Frete grátis para pedidos acima de R$ 100,00</p>
+                <button class="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-6 rounded-lg transition flex items-center">
+                    Ver Ofertas <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="py-8 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h3 class="text-2xl font-bold mb-6 flex items-center">
+                <i class="fas fa-star mr-2 text-yellow-400"></i> Destaques
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-4 transition flex flex-col items-center">
+                    <div class="w-16 h-16 bg-primary bg-opacity-20 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-pills text-primary text-2xl"></i>
+                    </div>
+                    <span class="text-white font-medium">Medicamentos</span>
+                    <span class="text-xs text-gray-400 mt-1">+50 itens</span>
+                </a>
+                <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-4 transition flex flex-col items-center">
+                    <div class="w-16 h-16 bg-blue-500 bg-opacity-20 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-heart text-blue-400 text-2xl"></i>
+                    </div>
+                    <span class="text-white font-medium">Vitaminas</span>
+                    <span class="text-xs text-gray-400 mt-1">+30 itens</span>
+                </a>
+                <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-4 transition flex flex-col items-center">
+                    <div class="w-16 h-16 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-baby text-green-400 text-2xl"></i>
+                    </div>
+                    <span class="text-white font-medium">Infantil</span>
+                    <span class="text-xs text-gray-400 mt-1">+25 itens</span>
+                </a>
+                <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-4 transition flex flex-col items-center">
+                    <div class="w-16 h-16 bg-purple-500 bg-opacity-20 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-prescription-bottle text-purple-400 text-2xl"></i>
+                    </div>
+                    <span class="text-white font-medium">Genéricos</span>
+                    <span class="text-xs text-gray-400 mt-1">Economize</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <!-- Category Filter -->
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold">Produtos</h3>
+            <div class="flex space-x-2">
+                <button id="filterBtn" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm transition flex items-center">
+                    <i class="fas fa-filter mr-2"></i> Filtrar
+                </button>
+                <button id="sortBtn" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm transition flex items-center">
+                    <i class="fas fa-sort mr-2"></i> Ordenar
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Panel (Hidden by default) -->
+        <div id="filterPanel" class="hidden bg-gray-800 rounded-lg p-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <h4 class="font-bold mb-3 text-white">Categorias</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox text-primary rounded" checked>
+                            <span class="ml-2 text-gray-300">Medicamentos</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox text-primary rounded" checked>
+                            <span class="ml-2 text-gray-300">Vitaminas</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox text-primary rounded" checked>
+                            <span class="ml-2 text-gray-300">Higiene</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-white">Preço</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <input type="range" min="0" max="200" value="200" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                <span>R$ 0</span>
+                                <span>R$ 200+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-white">Outros Filtros</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox text-primary rounded">
+                            <span class="ml-2 text-gray-300">Com desconto</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox text-primary rounded">
+                            <span class="ml-2 text-gray-300">Entrega rápida</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <!-- Products will be loaded here dynamically -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center mt-8">
+            <nav class="inline-flex rounded-md shadow">
+                <a href="#" class="px-3 py-2 rounded-l-md bg-gray-800 text-gray-300 hover:bg-gray-700">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <a href="#" class="px-3 py-2 bg-gray-800 text-gray-300 hover:bg-gray-700 border-l border-gray-700">1</a>
+                <a href="#" class="px-3 py-2 bg-gray-800 text-gray-300 hover:bg-gray-700 border-l border-gray-700">2</a>
+                <a href="#" class="px-3 py-2 bg-gray-800 text-gray-300 hover:bg-gray-700 border-l border-gray-700">3</a>
+                <a href="#" class="px-3 py-2 rounded-r-md bg-gray-800 text-gray-300 hover:bg-gray-700 border-l border-gray-700">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Floating Cart Button -->
+    <div id="cartButton" class="fixed bottom-6 right-6 bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-xl cursor-pointer transition-all duration-300 z-40 cart-bounce">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="cartBadge" class="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">0</span>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-gray-900 shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center">
+                    <i class="fas fa-shopping-cart mr-2"></i> Seu Carrinho
+                </h3>
+                <button id="closeCart" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cartItems" class="space-y-4">
+                <!-- Cart items will be loaded here -->
+                <div id="emptyCart" class="text-center py-10">
+                    <i class="fas fa-shopping-cart text-4xl text-gray-600 mb-4"></i>
+                    <p class="text-gray-400">Seu carrinho está vazio</p>
+                    <button class="mt-4 bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition">
+                        Ver produtos
+                    </button>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-6 pt-4">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-400">Subtotal:</span>
+                    <span id="cartSubtotal" class="text-white">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-400">Frete:</span>
+                    <span id="cartShipping" class="text-white">-</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold mt-4 pt-2 border-t border-gray-700">
+                    <span>Total:</span>
+                    <span id="cartTotal" class="text-primary">R$ 0,00</span>
+                </div>
+                
+                <button id="checkoutBtn" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-lg mt-6 transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i class="fas fa-whatsapp mr-2"></i> Finalizar via WhatsApp
+                </button>
+                
+                <p class="text-xs text-gray-500 mt-4 text-center">
+                    <i class="fas fa-lock mr-1"></i> Seus dados estão seguros
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Minha Conta</h3>
+                <button id="closeUserModal" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-2xl font-bold">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Visitante</h4>
+                        <p class="text-sm text-gray-400">Entre ou cadastre-se</p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 pt-4">
+                    <button class="w-full bg-primary hover:bg-primary-dark text-white py-2 px-4 rounded-lg mb-3">
+                        Entrar
+                    </button>
+                    <button class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
+                        Cadastrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-white font-bold mb-4">Pharmacity</h4>
+                    <p class="text-sm mb-4">Sua farmácia digital com entrega rápida e preços competitivos.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Links Rápidos</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="hover:text-white transition">Produtos</a></li>
+                        <li><a href="#" class="hover:text-white transition">Ofertas</a></li>
+                        <li><a href="#" class="hover:text-white transition">Sobre Nós</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Ajuda</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                        <li><a href="#" class="hover:text-white transition">Entrega</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pagamentos</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contato</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Newsletter</h4>
+                    <p class="text-sm mb-4">Cadastre-se para receber ofertas exclusivas.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Seu e-mail" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-primary w-full">
+                        <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
+                <p>&copy; 2023 Pharmacity. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>
