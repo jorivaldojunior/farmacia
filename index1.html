@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmácia Multimedic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: white;
+    }
+    .arrow {
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center h-screen text-center px-4">
+
+  <!-- LOGO -->
+  <img src="./image/logofarma.png" alt="Logo Farmácia Multimedic" class="w-64 md:w-72 mb-10" />
+
+ 
+  <!-- BOTÃO COM SETA -->
+  <button
+    onclick="avancarPagina()"
+    class="arrow mt-6 bg-red-600 hover:bg-red-700 text-white text-lg font-semibold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition duration-300"
+  >
+    Avançar
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+
+  <!-- JS -->
+  <script>
+    function avancarPagina() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>
