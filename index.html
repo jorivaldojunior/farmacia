@@ -10,20 +10,19 @@
       background: white;
       overflow-x: hidden;
     }
-    
-    /* Animação da logo */
+
     .logo-animada {
       animation: bounceHorizontal 3s infinite ease-in-out;
       transform-origin: center bottom;
       width: 300px;
     }
-    
+
     @media (min-width: 768px) {
       .logo-animada {
         width: 400px;
       }
     }
-    
+
     @keyframes bounceHorizontal {
       0%, 100% {
         transform: translateX(0) scale(1);
@@ -38,39 +37,25 @@
         transform: translateX(30px) scale(1.05, 0.95);
       }
     }
-    
-    /* Seta limpa e animada */
-    .btn-seta-limpa {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      margin-top: 60px;
-      font-size: 100px;
-      color: #ef4444;
-      font-weight: bold;
-      padding: 0;
-      line-height: 0.8;
-      animation: moveSeta 1.5s infinite ease-in-out;
+
+    /* Botão circular moderno */
+    .btn-circular {
       transition: all 0.3s ease;
+      animation: pulse 2s infinite ease-in-out;
     }
-    
-    @keyframes moveSeta {
+
+    .btn-circular:hover {
+      transform: scale(1.1);
+      background-color: #b91c1c;
+    }
+
+    @keyframes pulse {
       0%, 100% {
-        transform: translateX(0);
+        transform: scale(1);
       }
       50% {
-        transform: translateX(20px);
+        transform: scale(1.05);
       }
-    }
-    
-    .btn-seta-limpa:hover {
-      animation: none;
-      transform: translateX(30px) scale(1.2);
-      color: #dc2626;
-    }
-    
-    .btn-seta-limpa:active {
-      transform: translateX(30px) scale(0.9);
     }
   </style>
 </head>
@@ -79,12 +64,14 @@
   <!-- LOGO COM ANIMAÇÃO -->
   <img src="./image/logofarma.png" alt="Logo Farmácia Multimedic" class="logo-animada" />
 
-  <!-- BOTÃO COM SETA LIMPA -->
-  <button
-    onclick="avancarPagina()"
-    class="btn-seta-limpa"
-    aria-label="Avançar"
-  >></button>
+  <!-- BOTÃO REDONDO COM SETA -->
+  <button onclick="avancarPagina()" aria-label="Avançar"
+    class="btn-circular mt-16 w-20 h-20 flex items-center justify-center rounded-full bg-red-500 shadow-lg hover:shadow-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24"
+      stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
 
   <!-- JS -->
   <script>
