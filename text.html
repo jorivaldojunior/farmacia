@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pharmacity - Farmácia Delivery</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts - Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #e50914;
+      --primary-dark: #b2070f;
+      --secondary-color: #00b4d8;
+      --dark-bg: #141414;
+      --dark-card: #1f1f1f;
+      --text-light: #e5e5e5;
+      --text-gray: #808080;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #282828;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-color);
+    }
+
+    /* Menu Mobile Moderno */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-out;
+    }
+    
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    
+    .menu-item {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .menu-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+    
+    .menu-item:hover::after {
+      width: 100%;
+    }
+    
+    /* Efeito de overlay */
+    .menu-overlay {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    
+    .menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Animação de produtos */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .product-animate {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    /* Efeito de hover nos cards */
+    .product-card {
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Botões com gradiente */
+    .gradient-btn {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      transition: all 0.3s ease;
+    }
+
+    .gradient-btn:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+      transform: translateY(-2px);
+    }
+
+    /* Floating Cart Animation */
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .cart-bounce {
+      animation: bounce 2s infinite;
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <!-- Header Fixo -->
+  <header class="bg-black bg-opacity-90 fixed top-0 left-0 right-0 z-40 shadow-lg backdrop-blur-sm h-[80px] md:h-[100px] transition-all duration-300">
+    <div class="container mx-auto px-4 h-full">
+      <div class="flex items-center justify-between h-full">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img src="./image/logofarma.png" alt="Logo" class="rounded-full h-12 w-12 md:h-14 md:w-14 mr-3">
+          <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Pharmacity
+          </h1>
+        </div>
+
+        <!-- Menu Desktop -->
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="#home" class="text-white hover:text-primary transition">Início</a>
+          <a href="#products" class="text-white hover:text-primary transition">Produtos</a>
+          <a href="#offers" class="text-white hover:text-primary transition">Ofertas</a>
+          <a href="#about" class="text-white hover:text-primary transition">Sobre</a>
+          <a href="#contact" class="text-white hover:text-primary transition">Contato</a>
+        </nav>
+
+        <!-- Ícones Direita -->
+        <div class="flex items-center space-x-4">
+          <button id="searchBtn" class="text-white hover:text-primary transition md:hidden">
+            <i class="fas fa-search text-xl"></i>
+          </button>
+          <button id="mobileMenuBtn" class="text-white text-2xl md:hidden">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <div class="hidden md:flex items-center space-x-4">
+            <button id="userBtn" class="text-white hover:text-primary transition flex items-center">
+              <i class="fas fa-user-circle text-2xl"></i>
+              <span class="ml-2 hidden lg:inline" id="userName">Entrar</span>
+            </button>
+            <button id="cartBtn" class="text-white hover:text-primary transition relative">
+              <i class="fas fa-shopping-cart text-2xl"></i>
+              <span id="cartBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Barra de Pesquisa Mobile -->
+  <div id="mobileSearch" class="fixed top-[80px] left-0 right-0 bg-gray-900 z-30 p-3 hidden md:hidden">
+    <div class="relative">
+      <input
+        type="text"
+        placeholder="Buscar medicamentos..."
+        class="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700 focus:border-primary transition-all duration-300"
+      />
+      <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+    </div>
+  </div>
+
+  <!-- Menu Mobile Moderno -->
+  <div class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 shadow-2xl p-6">
+    <div class="flex justify-between items-center mb-8">
+      <img src="./image/logofarma.png" alt="Logo" class="rounded-full h-10 w-10">
+      <button id="closeMenuBtn" class="text-white text-2xl">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <nav class="flex flex-col space-y-4">
+      <a href="#home" class="menu-item text-white text-lg py-2">Início</a>
+      <a href="#featured" class="menu-item text-white text-lg py-2">Destaques</a>
+      <a href="#products" class="menu-item text-white text-lg py-2">Produtos</a>
+      <a href="#about" class="menu-item text-white text-lg py-2">Sobre</a>
+      <a href="#location" class="menu-item text-white text-lg py-2">Localização</a>
+      <a href="#contact" class="menu-item text-white text-lg py-2">Contato</a>
+      <a href="#admin" class="menu-item text-white text-lg py-2">Administração</a>
+    </nav>
+    
+    <div class="absolute bottom-6 left-6 right-6">
+      <button id="mobileUserBtn" class="w-full gradient-btn text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center">
+        <i class="fas fa-user-circle mr-2"></i>
+        <span id="mobileUserName">Entrar/Cadastrar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay do menu -->
+  <div id="menuOverlay" class="menu-overlay fixed inset-0 bg-black bg-opacity-70 z-40"></div>
+
+  <!-- Modal de Login/Cadastro -->
+  <div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
+    <div class="bg-gray-800 rounded-lg max-w-md w-full p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold">Acesse sua conta</h3>
+        <button id="closeAuthModal" class="text-gray-400 hover:text-white">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="flex space-x-4 mb-6">
+        <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg flex items-center justify-center">
+          <i class="fab fa-facebook-f mr-2"></i> Facebook
+        </button>
+        <button class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg flex items-center justify-center">
+          <i class="fab fa-google mr-2"></i> Google
+        </button>
+      </div>
+      
+      <div class="flex items-center my-4">
+        <div class="flex-grow border-t border-gray-700"></div>
+        <span class="mx-4 text-gray-400 text-sm">ou</span>
+        <div class="flex-grow border-t border-gray-700"></div>
+      </div>
+      
+      <form id="authForm" class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium mb-1">E-mail</label>
+          <input type="email" id="email" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+        
+        <div>
+          <label for="password" class="block text-sm font-medium mb-1">Senha</label>
+          <input type="password" id="password" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <label class="flex items-center">
+            <input type="checkbox" class="form-checkbox text-primary rounded">
+            <span class="ml-2 text-sm text-gray-400">Lembrar-me</span>
+          </label>
+          <a href="#" class="text-sm text-primary hover:underline">Esqueceu a senha?</a>
+        </div>
+        
+        <button type="submit" class="w-full gradient-btn text-white font-semibold py-3 px-4 rounded-lg transition">
+          Entrar
+        </button>
+        
+        <div class="text-center">
+          <button type="button" id="showRegisterBtn" class="text-primary hover:text-primary-dark text-sm">
+            Não tem conta? Cadastre-se
+          </button>
+        </div>
+      </form>
+      
+      <form id="registerForm" class="hidden space-y-4">
+        <div>
+          <label for="regName" class="block text-sm font-medium mb-1">Nome completo</label>
+          <input type="text" id="regName" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+        
+        <div>
+          <label for="regEmail" class="block text-sm font-medium mb-1">E-mail</label>
+          <input type="email" id="regEmail" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+        
+        <div>
+          <label for="regPassword" class="block text-sm font-medium mb-1">Senha</label>
+          <input type="password" id="regPassword" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+        
+        <div>
+          <label for="regConfirmPassword" class="block text-sm font-medium mb-1">Confirmar Senha</label>
+          <input type="password" id="regConfirmPassword" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+        
+        <button type="submit" class="w-full gradient-btn text-white font-semibold py-3 px-4 rounded-lg transition">
+          Cadastrar
+        </button>
+        
+        <div class="text-center">
+          <button type="button" id="showLoginBtn" class="text-primary hover:text-primary-dark text-sm">
+            Já tem conta? Faça login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <main class="pt-[80px] md:pt-[100px]">
+    <!-- Hero Banner -->
+    <section id="home" class="relative bg-cover bg-center flex items-center justify-start min-h-[70vh] md:min-h-[80vh]" style="background-image: url('./image/banner5.png')">
+      <div class="absolute inset-0 bg-black/60 md:bg-black/70"></div>
+
+      <div class="relative z-10 max-w-2xl mx-auto px-6 w-full py-16">
+        <span class="bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4 inline-block shadow-md">
+          PROMOÇÃO
+        </span>
+        <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-xl mb-6">
+          Até 30% de desconto<br />em medicamentos selecionados
+        </h2>
+        <p class="text-gray-200 text-lg sm:text-xl md:text-2xl mt-3 md:mt-4 mb-6 md:mb-8 drop-shadow-md">
+          Frete grátis para pedidos acima de <strong>R$ 100,00</strong>
+        </p>
+        <button class="gradient-btn text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition flex items-center text-lg">
+          Ver Ofertas <i class="fas fa-arrow-right ml-3"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section id="featured" class="py-12 bg-gray-900">
+      <div class="container mx-auto px-4">
+        <h3 class="text-2xl font-bold mb-8 flex items-center">
+          <i class="fas fa-star mr-2 text-yellow-400"></i> Destaques
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition flex flex-col items-center transform hover:-translate-y-1">
+            <div class="w-20 h-20 bg-primary bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+              <i class="fas fa-pills text-primary text-3xl"></i>
+            </div>
+            <span class="text-white font-medium text-center">Medicamentos</span>
+            <span class="text-xs text-gray-400 mt-2">+50 itens</span>
+          </a>
+          <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition flex flex-col items-center transform hover:-translate-y-1">
+            <div class="w-20 h-20 bg-blue-500 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+              <i class="fas fa-heart text-blue-400 text-3xl"></i>
+            </div>
+            <span class="text-white font-medium text-center">Vitaminas</span>
+            <span class="text-xs text-gray-400 mt-2">+30 itens</span>
+          </a>
+          <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition flex flex-col items-center transform hover:-translate-y-1">
+            <div class="w-20 h-20 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+              <i class="fas fa-baby text-green-400 text-3xl"></i>
+            </div>
+            <span class="text-white font-medium text-center">Infantil</span>
+            <span class="text-xs text-gray-400 mt-2">+25 itens</span>
+          </a>
+          <a href="#" class="featured-category bg-gray-800 hover:bg-gray-700 rounded-lg p-6 transition flex flex-col items-center transform hover:-translate-y-1">
+            <div class="w-20 h-20 bg-purple-500 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+              <i class="fas fa-prescription-bottle text-purple-400 text-3xl"></i>
+            </div>
+            <span class="text-white font-medium text-center">Genéricos</span>
+            <span class="text-xs text-gray-400 mt-2">Economize</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-8">
+          <h3 class="text-2xl font-bold">Produtos em Destaque</h3>
+          <a href="#" class="text-primary hover:text-primary-dark flex items-center">
+            Ver todos <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <!-- Product 1 -->
+          <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.1s">
+            <div class="relative">
+              <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Paracetamol" alt="Paracetamol 500mg" class="w-full h-40 object-cover">
+              <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">30% OFF</span>
+              <button onclick="addToCart(1)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="text-sm font-semibold text-white mb-1 truncate">Paracetamol 500mg</h4>
+              <div class="flex items-center">
+                <span class="text-primary font-bold">R$ 10,00</span>
+                <span class="text-xs text-gray-400 line-through ml-2">R$ 12,50</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 2 -->
+          <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.2s">
+            <div class="relative">
+              <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dipirona" alt="Dipirona 300mg" class="w-full h-40 object-cover">
+              <button onclick="addToCart(2)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="text-sm font-semibold text-white mb-1 truncate">Dipirona 300mg</h4>
+              <div class="flex items-center">
+                <span class="text-white font-bold">R$ 9,99</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 3 -->
+          <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.3s">
+            <div class="relative">
+              <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Amoxicilina" alt="Amoxicilina 500mg" class="w-full h-40 object-cover">
+              <button onclick="addToCart(3)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="text-sm font-semibold text-white mb-1 truncate">Amoxicilina 500mg</h4>
+              <div class="flex items-center">
+                <span class="text-white font-bold">R$ 35,00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 4 -->
+          <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.4s">
+            <div class="relative">
+              <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dorflex" alt="Dorflex" class="w-full h-40 object-cover">
+              <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">20% OFF</span>
+              <button onclick="addToCart(4)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="text-sm font-semibold text-white mb-1 truncate">Dorflex</h4>
+              <div class="flex items-center">
+                <span class="text-primary font-bold">R$ 12,50</span>
+                <span class="text-xs text-gray-400 line-through ml-2">R$ 15,00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 5 -->
+          <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.5s">
+            <div class="relative">
+              <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Vitamina+C" alt="Vitamina C 1g" class="w-full h-40 object-cover">
+              <button onclick="addToCart(5)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h4 class="text-sm font-semibold text-white mb-1 truncate">Vitamina C 1g</h4>
+              <div class="flex items-center">
+                <span class="text-white font-bold">R$ 22,00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Offers Section -->
+    <section id="offers" class="py-12 bg-gray-900">
+      <div class="container mx-auto px-4">
+        <h3 class="text-2xl font-bold mb-8 flex items-center">
+          <i class="fas fa-percentage mr-2 text-red-400"></i> Ofertas Especiais
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Offer 1 -->
+          <div class="bg-gradient-to-r from-red-900 to-red-700 rounded-lg p-6 flex items-center">
+            <div class="flex-shrink-0 bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mr-4">
+              <i class="fas fa-pills text-white text-2xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-white">Desconto em Medicamentos</h4>
+              <p class="text-gray-300">Até 40% de desconto em medicamentos selecionados</p>
+            </div>
+          </div>
+          
+          <!-- Offer 2 -->
+          <div class="bg-gradient-to-r from-blue-900 to-blue-700 rounded-lg p-6 flex items-center">
+            <div class="flex-shrink-0 bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mr-4">
+              <i class="fas fa-truck text-white text-2xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-white">Frete Grátis</h4>
+              <p class="text-gray-300">Para compras acima de R$ 100,00 em toda a região</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+            <h3 class="text-2xl font-bold mb-4">Sobre a Pharmacity</h3>
+            <p class="text-gray-400 mb-4">
+              A Pharmacity é uma farmácia digital comprometida em oferecer os melhores produtos com entrega rápida e atendimento personalizado.
+            </p>
+            <p class="text-gray-400 mb-4">
+              Nossa missão é facilitar o acesso a medicamentos e produtos de saúde com comodidade e segurança.
+            </p>
+            <button class="gradient-btn text-white font-semibold py-2 px-6 rounded-lg transition">
+              Saiba mais
+            </button>
+          </div>
+          <div class="md:w-1/2">
+            <img src="https://placehold.co/600x400/1F1F1F/FFFFFF?text=Pharmacity" alt="Sobre a Pharmacity" class="rounded-lg shadow-xl">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location" class="py-12 bg-gray-900">
+      <div class="container mx-auto px-4">
+        <h3 class="text-2xl font-bold mb-8">Nossa Localização</h3>
+        
+        <div class="flex flex-col md:flex-row">
+          <div class="md:w-1/2 mb-6 md:mb-0 md:pr-6">
+            <h4 class="text-xl font-semibold mb-4">Farmácia Física</h4>
+            <p class="text-gray-400 mb-2"><i class="fas fa-map-marker-alt text-primary mr-2"></i> Rua das Farmácias, 123 - Centro</p>
+            <p class="text-gray-400 mb-4">São Paulo - SP</p>
+            
+            <h4 class="text-xl font-semibold mb-4 mt-6">Horário de Funcionamento</h4>
+            <p class="text-gray-400 mb-1">Segunda a Sexta: 8h às 20h</p>
+            <p class="text-gray-400 mb-1">Sábado: 9h às 18h</p>
+            <p class="text-gray-400">Domingo: 10h às 14h</p>
+          </div>
+          
+          <div class="md:w-1/2">
+            <div class="bg-gray-800 rounded-lg overflow-hidden h-64">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.0754267452926!2d-46.65342658440671!3d-23.565734367638155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f2c9776a!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1620000000000!5m2!1spt-BR!2sbr" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy"
+                class="filter grayscale-50 opacity-90"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-12">
+      <div class="container mx-auto px-4">
+        <h3 class="text-2xl font-bold mb-8">Entre em Contato</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h4 class="text-xl font-semibold mb-4">Informações de Contato</h4>
+            
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <i class="fas fa-phone-alt text-primary mt-1 mr-3"></i>
+                <div>
+                  <h5 class="font-medium">Telefone</h5>
+                  <p class="text-gray-400">(11) 9999-9999</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <i class="fas fa-envelope text-primary mt-1 mr-3"></i>
+                <div>
+                  <h5 class="font-medium">E-mail</h5>
+                  <p class="text-gray-400">contato@pharmacity.com.br</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <i class="fab fa-whatsapp text-primary mt-1 mr-3"></i>
+                <div>
+                  <h5 class="font-medium">WhatsApp</h5>
+                  <p class="text-gray-400">(11) 99999-9999</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="text-xl font-semibold mb-4">Envie uma Mensagem</h4>
+            
+            <form class="space-y-4">
+              <div>
+                <label for="name" class="block text-sm font-medium mb-1">Nome</label>
+                <input type="text" id="name" class="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700">
+              </div>
+              
+              <div>
+                <label for="email" class="block text-sm font-medium mb-1">E-mail</label>
+                <input type="email" id="email" class="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700">
+              </div>
+              
+              <div>
+                <label for="message" class="block text-sm font-medium mb-1">Mensagem</label>
+                <textarea id="message" rows="4" class="w-full px-4 py-2 bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700"></textarea>
+              </div>
+              
+              <button type="submit" class="gradient-btn text-white font-semibold py-2 px-6 rounded-lg transition">
+                Enviar Mensagem
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h4 class="text-white font-bold mb-4">Pharmacity</h4>
+          <p class="text-sm mb-4">
+            Sua farmácia digital com entrega rápida e preços competitivos.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-white font-bold mb-4">Links Rápidos</h4>
+          <ul class="space-y-2">
+            <li><a href="#home" class="hover:text-white transition">Home</a></li>
+            <li><a href="#products" class="hover:text-white transition">Produtos</a></li>
+            <li><a href="#offers" class="hover            <li><a href="#about" class="hover:text-white transition">Sobre</a></li>
+            <li><a href="#contact" class="hover:text-white transition">Contato</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-white font-bold mb-4">Informações</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white transition">Política de Privacidade</a></li>
+            <li><a href="#" class="hover:text-white transition">Termos de Uso</a></li>
+            <li><a href="#" class="hover:text-white transition">Trocas e Devoluções</a></li>
+            <li><a href="#" class="hover:text-white transition">Dúvidas Frequentes</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-white font-bold mb-4">Newsletter</h4>
+          <p class="text-sm mb-4">
+            Assine nossa newsletter para receber ofertas exclusivas.
+          </p>
+          <form class="flex">
+            <input 
+              type="email" 
+              placeholder="Seu e-mail" 
+              class="px-4 py-2 bg-gray-800 text-white rounded-l-lg focus:outline-none focus:ring-1 focus:ring-primary w-full"
+            >
+            <button 
+              type="submit" 
+              class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-r-lg transition"
+            >
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
+        <p>&copy; 2023 Pharmacity. Todos os direitos reservados.</p>
+        <p class="mt-2">CNPJ: 12.345.678/0001-99</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Botão Flutuante do Carrinho -->
+  <div id="floatingCart" class="fixed bottom-6 right-6 bg-primary text-white p-4 rounded-full shadow-xl cursor-pointer z-30 cart-bounce">
+    <i class="fas fa-shopping-cart text-xl"></i>
+    <span id="floatingCartBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+  </div>
+
+  <!-- Carrinho de Compras -->
+  <div id="cartSidebar" class="fixed top-0 right-0 w-full md:w-96 h-full bg-gray-900 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 overflow-y-auto">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold flex items-center">
+          <i class="fas fa-shopping-cart mr-2"></i> Seu Carrinho
+        </h3>
+        <button id="closeCartBtn" class="text-gray-400 hover:text-white text-2xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div id="cartItems" class="space-y-4 mb-6">
+        <!-- Itens do carrinho serão adicionados dinamicamente aqui -->
+        <div class="text-center py-8 text-gray-500" id="emptyCartMessage">
+          <i class="fas fa-shopping-cart text-4xl mb-4"></i>
+          <p>Seu carrinho está vazio</p>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 pt-4 mb-4">
+        <div class="flex justify-between mb-2">
+          <span>Subtotal:</span>
+          <span id="cartSubtotal">R$ 0,00</span>
+        </div>
+        <div class="flex justify-between mb-2">
+          <span>Frete:</span>
+          <span id="cartShipping">R$ 0,00</span>
+        </div>
+        <div class="flex justify-between font-bold text-lg">
+          <span>Total:</span>
+          <span id="cartTotal">R$ 0,00</span>
+        </div>
+      </div>
+      
+      <button id="checkoutBtn" class="w-full gradient-btn text-white font-semibold py-3 px-4 rounded-lg transition mb-3">
+        Finalizar Compra
+      </button>
+      <button id="continueShoppingBtn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">
+        Continuar Comprando
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay do carrinho -->
+  <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-70 z-40 hidden"></div>
+
+  <!-- Scripts -->
+  <script>
+    // Dados dos produtos
+    const products = {
+      1: { id: 1, name: "Paracetamol 500mg", price: 10.00, oldPrice: 12.50, image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Paracetamol" },
+      2: { id: 2, name: "Dipirona 300mg", price: 9.99, oldPrice: null, image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dipirona" },
+      3: { id: 3, name: "Amoxicilina 500mg", price: 35.00, oldPrice: null, image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Amoxicilina" },
+      4: { id: 4, name: "Dorflex", price: 12.50, oldPrice: 15.00, image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dorflex" },
+      5: { id: 5, name: "Vitamina C 1g", price: 22.00, oldPrice: null, image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Vitamina+C" }
+    };
+
+    // Carrinho de compras
+    let cart = {};
+    let cartItemCount = 0;
+    let cartTotal = 0;
+
+    // Elementos do DOM
+    const cartBadge = document.getElementById('cartBadge');
+    const floatingCartBadge = document.getElementById('floatingCartBadge');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const emptyCartMessage = document.getElementById('emptyCartMessage');
+    const cartSubtotal = document.getElementById('cartSubtotal');
+    const cartShipping = document.getElementById('cartShipping');
+    const cartTotalElement = document.getElementById('cartTotal');
+    const floatingCart = document.getElementById('floatingCart');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const userBtn = document.getElementById('userBtn');
+    const mobileUserBtn = document.getElementById('mobileUserBtn');
+    const authModal = document.getElementById('authModal');
+    const closeAuthModal = document.getElementById('closeAuthModal');
+    const showRegisterBtn = document.getElementById('showRegisterBtn');
+    const showLoginBtn = document.getElementById('showLoginBtn');
+    const authForm = document.getElementById('authForm');
+    const registerForm = document.getElementById('registerForm');
+    const searchBtn = document.getElementById('searchBtn');
+    const mobileSearch = document.getElementById('mobileSearch');
+    const closeCartBtn = document.getElementById('closeCartBtn');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+
+    // Função para adicionar item ao carrinho
+    function addToCart(productId) {
+      const product = products[productId];
+      
+      if (cart[productId]) {
+        cart[productId].quantity += 1;
+      } else {
+        cart[productId] = {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1
+        };
+      }
+      
+      updateCart();
+      openCart();
+      
+      // Animação de confirmação
+      const addButton = event.target;
+      addButton.innerHTML = '<i class="fas fa-check"></i>';
+      setTimeout(() => {
+        addButton.innerHTML = '<i class="fas fa-plus"></i>';
+      }, 1000);
+    }
+
+    // Função para remover item do carrinho
+    function removeFromCart(productId) {
+      if (cart[productId]) {
+        delete cart[productId];
+        updateCart();
+      }
+    }
+
+    // Função para atualizar quantidade no carrinho
+    function updateQuantity(productId, newQuantity) {
+      if (cart[productId] && newQuantity > 0) {
+        cart[productId].quantity = newQuantity;
+        updateCart();
+      } else if (newQuantity <= 0) {
+        removeFromCart(productId);
+      }
+    }
+
+    // Função para atualizar o carrinho na UI
+    function updateCart() {
+      // Atualizar contador
+      cartItemCount = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+      
+      if (cartItemCount > 0) {
+        cartBadge.classList.remove('hidden');
+        cartBadge.textContent = cartItemCount;
+        floatingCartBadge.classList.remove('hidden');
+        floatingCartBadge.textContent = cartItemCount;
+        emptyCartMessage.classList.add('hidden');
+      } else {
+        cartBadge.classList.add('hidden');
+        floatingCartBadge.classList.add('hidden');
+        emptyCartMessage.classList.remove('hidden');
+      }
+      
+      // Atualizar lista de itens
+      cartItemsContainer.innerHTML = '';
+      
+      let subtotal = 0;
+      
+      for (const productId in cart) {
+        const item = cart[productId];
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'flex items-center bg-gray-800 p-3 rounded-lg';
+        cartItemElement.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg mr-3">
+          <div class="flex-grow">
+            <h4 class="text-sm font-semibold">${item.name}</h4>
+            <p class="text-primary font-bold">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+          </div>
+          <div class="flex items-center">
+            <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" class="text-gray-400 hover:text-white px-2">
+              <i class="fas fa-minus"></i>
+            </button>
+            <span class="mx-2">${item.quantity}</span>
+            <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})" class="text-gray-400 hover:text-white px-2">
+              <i class="fas fa-plus"></i>
+            </button>
+            <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-400 ml-3">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+        
+        cartItemsContainer.appendChild(cartItemElement);
+      }
+      
+      // Calcular frete (grátis para compras acima de 100)
+      const shipping = subtotal >= 100 ? 0 : 10;
+      const total = subtotal + shipping;
+      
+      // Atualizar totais
+      cartSubtotal.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      cartShipping.textContent = shipping === 0 ? 'Grátis' : `R$ ${shipping.toFixed(2).replace('.', ',')}`;
+      cartTotalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+      
+      // Salvar carrinho no localStorage
+      localStorage.setItem('pharmacityCart', JSON.stringify(cart));
+    }
+
+    // Função para abrir o carrinho
+    function openCart() {
+      cartSidebar.classList.remove('translate-x-full');
+      cartOverlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Função para fechar o carrinho
+    function closeCart() {
+      cartSidebar.classList.add('translate-x-full');
+      cartOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // Função para abrir/fechar menu mobile
+    function toggleMobileMenu() {
+      mobileMenu.classList.toggle('open');
+      menuOverlay.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    }
+
+    // Função para abrir/fechar modal de autenticação
+    function toggleAuthModal() {
+      authModal.classList.toggle('hidden');
+      document.body.style.overflow = authModal.classList.contains('hidden') ? '' : 'hidden';
+    }
+
+    // Função para alternar entre login e cadastro
+    function toggleAuthForms() {
+      authForm.classList.toggle('hidden');
+      registerForm.classList.toggle('hidden');
+    }
+
+    // Função para abrir/fechar busca mobile
+    function toggleMobileSearch() {
+      mobileSearch.classList.toggle('hidden');
+    }
+
+    // Carregar carrinho do localStorage ao iniciar
+    function loadCart() {
+      const savedCart = localStorage.getItem('pharmacityCart');
+      if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCart();
+      }
+    }
+
+    // Event Listeners
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    closeMenuBtn.addEventListener('click', toggleMobileMenu);
+    menuOverlay.addEventListener('click', toggleMobileMenu);
+    
+    userBtn.addEventListener('click', toggleAuthModal);
+    mobileUserBtn.addEventListener('click', toggleAuthModal);
+    closeAuthModal.addEventListener('click', toggleAuthModal);
+    
+    showRegisterBtn.addEventListener('click', toggleAuthForms);
+    showLoginBtn.addEventListener('click', toggleAuthForms);
+    
+    searchBtn.addEventListener('click', toggleMobileSearch);
+    
+    floatingCart.addEventListener('click', openCart);
+    closeCartBtn.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+    continueShoppingBtn.addEventListener('click', closeCart);
+    
+    checkoutBtn.addEventListener('click', () => {
+      alert('Compra finalizada com sucesso! Obrigado por comprar na Pharmacity.');
+      cart = {};
+      updateCart();
+      closeCart();
+    });
+
+    // Fechar modais ao pressionar ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (!authModal.classList.contains('hidden')) {
+          toggleAuthModal();
+        }
+        if (!cartSidebar.classList.contains('translate-x-full')) {
+          closeCart();
+        }
+        if (mobileMenu.classList.contains('open')) {
+          toggleMobileMenu();
+        }
+      }
+    });
+
+    // Carregar carrinho ao iniciar
+    window.addEventListener('DOMContentLoaded', loadCart);
+
+    // Expor funções para o escopo global
+    window.addToCart = addToCart;
+    window.removeFromCart = removeFromCart;
+    window.updateQuantity = updateQuantity;
+  </script>
+</body>
+</html>

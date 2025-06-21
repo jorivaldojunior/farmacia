@@ -3,123 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Fármacia Multimedic</title>
+  <title>Pharmacity - Farmácia Delivery</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts - Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    :root {
-      --primary-color: #e50914;
-      --primary-dark: #b2070f;
-      --secondary-color: #00b4d8;
-      --dark-bg: #141414;
-      --dark-card: #1f1f1f;
-      --text-light: #e5e5e5;
-      --text-gray: #808080;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--dark-bg);
-      color: var(--text-light);
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #282828;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #555;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--primary-color);
-    }
-
-    /* Menu Mobile Moderno */
-    .mobile-menu {
-      transform: translateX(100%);
-      transition: transform 0.3s ease-out;
-    }
-    
-    .mobile-menu.open {
-      transform: translateX(0);
-    }
-    
-    .menu-item {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .menu-item::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary-color);
-      transition: width 0.3s ease;
-    }
-    
-    .menu-item:hover::after {
-      width: 100%;
-    }
-    
-    /* Efeito de overlay */
-    .menu-overlay {
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s, visibility 0.3s;
-    }
-    
-    .menu-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Animação de produtos */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .product-animate {
-      animation: fadeIn 0.5s ease-out forwards;
-    }
-
-    /* Efeito de hover nos cards */
-    .product-card {
-      transition: all 0.3s ease;
-      transform-origin: center;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Botões com gradiente */
-    .gradient-btn {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-      transition: all 0.3s ease;
-    }
-
-    .gradient-btn:hover {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-      transform: translateY(-2px);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="antialiased">
   <!-- Header Fixo -->
@@ -137,11 +28,13 @@
         <!-- Menu Desktop -->
         <nav class="hidden md:flex items-center space-x-6">
           <a href="#home" class="text-white hover:text-primary transition">Início</a>
+          <a href="#featured" class="menu-item text-white text-lg py-2">Destaques</a>
           <a href="#products" class="text-white hover:text-primary transition">Produtos</a>
           <a href="#offers" class="text-white hover:text-primary transition">Ofertas</a>
           <a href="#about" class="text-white hover:text-primary transition">Sobre</a>
           <a href="#contact" class="text-white hover:text-primary transition">Contato</a>
-           <a href="./index.html" class="text-white hover:text-primary transition">Sair</a>
+          <a href="#admin" class="menu-item text-white text-lg py-2">Administração</a>
+          <a href="index.html" class="menu-item text-white text-lg py-2">Sair</a>
         </nav>
 
         <!-- Ícones Direita -->
@@ -157,10 +50,6 @@
             <button id="userBtn" class="text-white hover:text-primary transition flex items-center">
               <i class="fas fa-user-circle text-2xl"></i>
               <span class="ml-2 hidden lg:inline" id="userName">Entrar</span>
-            </button>
-            <button id="cartBtn" class="text-white hover:text-primary transition relative">
-              <i class="fas fa-shopping-cart text-2xl"></i>
-              <span id="cartBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
             </button>
           </div>
         </div>
@@ -196,8 +85,8 @@
       <a href="#about" class="menu-item text-white text-lg py-2">Sobre</a>
       <a href="#location" class="menu-item text-white text-lg py-2">Localização</a>
       <a href="#contact" class="menu-item text-white text-lg py-2">Contato</a>
-      <a href="./index.html" class="text-white hover:text-primary transition">Sair</a>
       <a href="#admin" class="menu-item text-white text-lg py-2">Administração</a>
+      <a href="index.html" class="menu-item text-white text-lg py-2">Sair</a>
     </nav>
     
     <div class="absolute bottom-6 left-6 right-6">
@@ -377,7 +266,7 @@
             <div class="relative">
               <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Paracetamol" alt="Paracetamol 500mg" class="w-full h-40 object-cover">
               <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">30% OFF</span>
-              <button class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+              <button onclick="addToCart(1)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -394,7 +283,7 @@
           <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.2s">
             <div class="relative">
               <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dipirona" alt="Dipirona 300mg" class="w-full h-40 object-cover">
-              <button class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+              <button onclick="addToCart(2)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -410,7 +299,7 @@
           <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.3s">
             <div class="relative">
               <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Amoxicilina" alt="Amoxicilina 500mg" class="w-full h-40 object-cover">
-              <button class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+              <button onclick="addToCart(3)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -427,7 +316,7 @@
             <div class="relative">
               <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dorflex" alt="Dorflex" class="w-full h-40 object-cover">
               <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">20% OFF</span>
-              <button class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+              <button onclick="addToCart(4)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -444,7 +333,7 @@
           <div class="product-card bg-gray-800 rounded-lg overflow-hidden shadow-md border border-gray-700 product-animate" style="animation-delay: 0.5s">
             <div class="relative">
               <img src="https://placehold.co/300x300/1F1F1F/FFFFFF?text=Vitamina+C" alt="Vitamina C 1g" class="w-full h-40 object-cover">
-              <button class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
+              <button onclick="addToCart(5)" class="absolute bottom-2 right-2 bg-primary hover:bg-primary-dark text-white p-2 rounded-full shadow-lg transition">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -499,7 +388,7 @@
           <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
             <h3 class="text-2xl font-bold mb-4">Sobre a Fármacia Multimedic</h3>
             <p class="text-gray-400 mb-4">
-              A Multimedic é uma farmácia digital comprometida em oferecer os melhores produtos com entrega rápida e atendimento personalizado.
+              A Multimedic é uma farmácia comprometida em oferecer os melhores produtos com entrega rápida e atendimento personalizado.
             </p>
             <p class="text-gray-400 mb-4">
               Nossa missão é facilitar o acesso a medicamentos e produtos de saúde com comodidade e segurança.
@@ -509,7 +398,7 @@
             </button>
           </div>
           <div class="md:w-1/2">
-            <img src="./image/banner5.png" alt="Sobre a Fármacia Multimedic" class="rounded-lg shadow-xl">
+            <img src="./image/banner3.png" alt="Sobre a Pharmacity" class="rounded-lg shadow-xl">
           </div>
         </div>
       </div>
@@ -563,7 +452,7 @@
                 <i class="fas fa-phone-alt text-primary mt-1 mr-3"></i>
                 <div>
                   <h5 class="font-medium">Telefone</h5>
-                  <p class="text-gray-400">(11) 9999-9999</p>
+                  <p class="text-gray-400">(81)991152307</p>
                 </div>
               </div>
               
@@ -579,7 +468,7 @@
                 <i class="fab fa-whatsapp text-primary mt-1 mr-3"></i>
                 <div>
                   <h5 class="font-medium">WhatsApp</h5>
-                  <p class="text-gray-400">(11) 99999-9999</p>
+                  <p class="text-gray-400">(81) 99115-2307</p>
                 </div>
               </div>
             </div>
@@ -619,9 +508,9 @@
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <h4 class="text-white font-bold mb-4">Pharmacity</h4>
+          <h4 class="text-white font-bold mb-4">Fármacia Multimedic</h4>
           <p class="text-sm mb-4">
-            Sua farmácia digital com entrega rápida e preços competitivos.
+            Sua farmácia com entrega rápida e preços competitivos.
           </p>
           <div class="flex space-x-4">
             <a href="#" class="text-gray-400 hover:text-white transition">
@@ -641,546 +530,98 @@
           <ul class="space-y-2">
             <li><a href="#home" class="hover:text-white transition">Home</a></li>
             <li><a href="#products" class="hover:text-white transition">Produtos</a></li>
-            <li><a href="#offers" class="hover:text-white transition">Ofertas</a></li>
-            <li><a href="#about" class="hover:text-white transition">Sobre Nós</a></li>
+            <li><a href="#offers" class="hover            <li><a href="#about" class="hover:text-white transition">Sobre</a></li>
+            <li><a href="#contact" class="hover:text-white transition">Contato</a></li>
           </ul>
         </div>
         
         <div>
-          <h4 class="text-white font-bold mb-4">Ajuda</h4>
+          <h4 class="text-white font-bold mb-4">Informações</h4>
           <ul class="space-y-2">
-            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
-            <li><a href="#" class="hover:text-white transition">Entrega</a></li>
-            <li><a href="#" class="hover:text-white transition">Pagamentos</a></li>
-            <li><a href="#" class="hover:text-white transition">Contato</a></li>
+            <li><a href="#" class="hover:text-white transition">Política de Privacidade</a></li>
+            <            <li><a href="#" class="hover:text-white transition">Termos de Uso</a></li>
+            <li><a href="#" class="hover:text-white transition">Trocas e Devoluções</a></li>
+            <li><a href="#" class="hover:text-white transition">Dúvidas Frequentes</a></li>
           </ul>
         </div>
         
         <div>
-          <h4 class="text-white font-bold mb-4">Newsletter</h4>
-          <p class="text-sm mb-4">
-            Cadastre-se para receber ofertas exclusivas.
-          </p>
-          <div class="flex">
-            <input
-              type="email"
-              placeholder="Seu e-mail"
-              class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-primary w-full"
-            />
-            <button
-              class="gradient-btn text-white px-4 py-2 rounded-r-lg"
-            >
-              <i class="fas fa-paper-plane"></i>
-            </button>
+          <h4 class="text-white font-bold mb-4">Formas de Pagamento</h4>
+          <div class="grid grid-cols-3 gap-2">
+            <img src="https://placehold.co/60x40/1F1F1F/FFFFFF?text=Visa" alt="Visa" class="bg-gray-800 p-1 rounded">
+            <img src="https://placehold.co/60x40/1F1F1F/FFFFFF?text=Master" alt="Mastercard" class="bg-gray-800 p-1 rounded">
+            <img src="https://placehold.co/60x40/1F1F1F/FFFFFF?text=Amex" alt="Amex" class="bg-gray-800 p-1 rounded">
+            <img src="https://placehold.co/60x40/1F1F1F/FFFFFF?text=Pix" alt="Pix" class="bg-gray-800 p-1 rounded">
+            <img src="https://placehold.co/60x40/1F1F1F/FFFFFF?text=Boleto" alt="Boleto" class="bg-gray-800 p-1 rounded">
+            <img src="https://placehold.co/60x40/1F1F1F/FFFFFF?text=Hiper" alt="Hipercard" class="bg-gray-800 p-1 rounded">
           </div>
         </div>
       </div>
       
       <div class="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
-        <p>&copy; 2023 Pharmacity. Todos os direitos reservados.</p>
-      </div>
-    </div>
+    <p class="mt-2">CNPJ: 00.000.000/0000-00 , Farmácia Multimedic. Todos os direitos reservados.</p>
+    <p class="mt-2"> Desenvolvedor:
+      <a 
+        href="https://www.linkedin.com/in/jorivaldo-azevedo/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="text-blue-600 hover:underline"
+      >
+        https://www.linkedin.com/in/jorivaldo-azevedo/
+      </a>
+    </p>
+</div>
+
   </footer>
 
+  <!-- Floating Cart Button -->
+  <button id="cartBtn" class="fixed bottom-6 right-6 bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-xl z-30 transition transform hover:scale-105 cart-bounce">
+    <i class="fas fa-shopping-cart text-xl"></i>
+    <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">0</span>
+  </button>
+
   <!-- Cart Sidebar -->
-  <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-gray-900 shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+  <div id="cartSidebar" class="fixed top-0 right-0 w-full md:w-96 h-full bg-gray-900 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 overflow-y-auto">
     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
-        <h3 class="text-xl font-bold flex items-center">
-          <i class="fas fa-shopping-cart mr-2"></i> Seu Carrinho
-        </h3>
-        <button id="closeCart" class="text-gray-400 hover:text-white">
-          <i class="fas fa-times text-xl"></i>
+        <h3 class="text-xl font-bold">Seu Carrinho</h3>
+        <button id="closeCartBtn" class="text-gray-400 hover:text-white">
+          <i class="fas fa-times text-2xl"></i>
         </button>
       </div>
-
-      <div id="cartItems" class="space-y-4">
-        <!-- Cart items will be loaded here -->
-        <div id="emptyCart" class="text-center py-10">
-          <i class="fas fa-shopping-cart text-4xl text-gray-600 mb-4"></i>
-          <p class="text-gray-400">Seu carrinho está vazio</p>
-          <button class="gradient-btn text-white px-4 py-2 rounded-lg mt-4 transition">
-            Ver produtos
-          </button>
+      
+      <div id="cartItems" class="space-y-4 mb-6">
+        <!-- Cart items will be added here dynamically -->
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-shopping-cart text-4xl mb-2"></i>
+          <p>Seu carrinho está vazio</p>
         </div>
       </div>
-
-      <div class="border-t border-gray-700 mt-6 pt-4">
+      
+      <div class="border-t border-gray-800 pt-4 mb-4">
         <div class="flex justify-between mb-2">
-          <span class="text-gray-400">Subtotal:</span>
-          <span id="cartSubtotal" class="text-white">R$ 0,00</span>
+          <span>Subtotal:</span>
+          <span id="cartSubtotal">R$ 0,00</span>
         </div>
         <div class="flex justify-between mb-2">
-          <span class="text-gray-400">Frete:</span>
-          <span id="cartShipping" class="text-white">-</span>
+          <span>Frete:</span>
+          <span id="cartShipping">A calcular</span>
         </div>
-        <div class="flex justify-between text-lg font-bold mt-4 pt-2 border-t border-gray-700">
+        <div class="flex justify-between font-bold text-lg">
           <span>Total:</span>
-          <span id="cartTotal" class="text-primary">R$ 0,00</span>
+          <span id="cartTotal">R$ 0,00</span>
         </div>
-
-        <button
-          id="checkoutBtn"
-          class="w-full gradient-btn text-white font-bold py-3 px-4 rounded-lg mt-6 transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled
-        >
-          <i class="fas fa-whatsapp mr-2"></i> Finalizar via WhatsApp
-        </button>
-
-        <p class="text-xs text-gray-500 mt-4 text-center">
-          <i class="fas fa-lock mr-1"></i> Seus dados estão seguros
-        </p>
       </div>
+      
+      <button id="checkoutBtn" class="w-full gradient-btn text-white font-semibold py-3 px-4 rounded-lg transition">
+        Finalizar Compra
+      </button>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center transform translate-y-10 opacity-0 transition-all duration-300 z-50">
-    <i id="toastIcon" class="fas fa-check-circle mr-2"></i>
-    <span id="toastMessage"></span>
-  </div>
+  <!-- Overlay do carrinho -->
+  <div id="cartOverlay" class="hidden fixed inset-0 bg-black bg-opacity-70 z-40"></div>
 
-  <script>
-    // Sistema de Autenticação
-    class AuthSystem {
-      constructor() {
-        this.currentUser = JSON.parse(localStorage.getItem('pharmacity_user')) || null;
-      }
-      
-      login(email, password) {
-        return new Promise((resolve, reject) => {
-          // Simular API call
-          setTimeout(() => {
-            if (email && password) {
-              const user = {
-                id: 1,
-                name: "João Silva",
-                email: email,
-                token: "simulated_jwt_token"
-              };
-              
-              this.currentUser = user;
-              localStorage.setItem('pharmacity_user', JSON.stringify(user));
-              resolve(user);
-            } else {
-              reject(new Error("E-mail e senha são obrigatórios"));
-            }
-          }, 1000);
-        });
-      }
-      
-      register(name, email, password) {
-        return new Promise((resolve, reject) => {
-          // Simular API call
-          setTimeout(() => {
-            if (name && email && password) {
-              const user = {
-                id: Math.floor(Math.random() * 1000) + 1,
-                name: name,
-                email: email,
-                token: "simulated_jwt_token"
-              };
-              
-              this.currentUser = user;
-              localStorage.setItem('pharmacity_user', JSON.stringify(user));
-              resolve(user);
-            } else {
-              reject(new Error("Todos os campos são obrigatórios"));
-            }
-          }, 1000);
-        });
-      }
-      
-      logout() {
-        this.currentUser = null;
-        localStorage.removeItem('pharmacity_user');
-      }
-      
-      isAuthenticated() {
-        return this.currentUser !== null;
-      }
-    }
-
-    // Inicializar autenticação
-    const auth = new AuthSystem();
-
-    // Atualizar UI baseado no estado de autenticação
-    function updateAuthUI() {
-      if (auth.isAuthenticated()) {
-        document.getElementById('userName').textContent = auth.currentUser.name;
-        document.getElementById('mobileUserName').textContent = auth.currentUser.name;
-        document.querySelectorAll('.auth-section').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.user-section').forEach(el => el.classList.remove('hidden'));
-      } else {
-        document.getElementById('userName').textContent = 'Entrar';
-        document.getElementById('mobileUserName').textContent = 'Entrar/Cadastrar';
-        document.querySelectorAll('.auth-section').forEach(el => el.classList.remove('hidden'));
-        document.querySelectorAll('.user-section').forEach(el => el.classList.add('hidden'));
-      }
-    }
-
-    // Mostrar notificação toast
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      const toastMessage = document.getElementById('toastMessage');
-      const toastIcon = document.getElementById('toastIcon');
-      
-      toastMessage.textContent = message;
-      
-      // Configurar cor e ícone baseado no tipo
-      switch(type) {
-        case 'success':
-          toast.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center transform translate-y-10 opacity-0 transition-all duration-300 z-50';
-          toastIcon.className = 'fas fa-check-circle mr-2';
-          break;
-        case 'error':
-          toast.className = 'fixed bottom-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center transform translate-y-10 opacity-0 transition-all duration-300 z-50';
-          toastIcon.className = 'fas fa-exclamation-circle mr-2';
-          break;
-        case 'warning':
-          toast.className = 'fixed bottom-4 right-4 bg-yellow-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center transform translate-y-10 opacity-0 transition-all duration-300 z-50';
-          toastIcon.className = 'fas fa-exclamation-triangle mr-2';
-          break;
-      }
-      
-      // Mostrar toast
-      setTimeout(() => {
-        toast.classList.remove('translate-y-10', 'opacity-0');
-        toast.classList.add('translate-y-0', 'opacity-100');
-      }, 100);
-      
-      // Esconder toast após 3 segundos
-      setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-10', 'opacity-0');
-      }, 3000);
-    }
-
-    // Gerenciamento do Carrinho
-    let cart = [];
-
-    function updateCart() {
-      const cartItems = document.getElementById('cartItems');
-      const emptyCart = document.getElementById('emptyCart');
-      const cartBadge = document.getElementById('cartBadge');
-      const cartSubtotal = document.getElementById('cartSubtotal');
-      const cartShipping = document.getElementById('cartShipping');
-      const cartTotal = document.getElementById('cartTotal');
-      const checkoutBtn = document.getElementById('checkoutBtn');
-      
-      if (cart.length === 0) {
-        cartItems.innerHTML = '';
-        cartItems.appendChild(emptyCart);
-        cartBadge.classList.add('hidden');
-        checkoutBtn.disabled = true;
-        return;
-      }
-      
-      // Atualizar itens do carrinho
-      cartItems.innerHTML = '';
-      let subtotal = 0;
-      
-      cart.forEach(item => {
-        const price = item.product.hasDiscount ? item.product.discountPrice : item.product.price;
-        subtotal += price * item.quantity;
-        
-        const cartItem = document.createElement('div');
-        cartItem.className = 'bg-gray-800 rounded-lg p-3 flex items-start';
-        cartItem.innerHTML = `
-          <img src="${item.product.image}" alt="${item.product.name}" class="w-16 h-16 object-cover rounded mr-3">
-          <div class="flex-grow">
-            <h5 class="font-medium text-white">${item.product.name}</h5>
-            <p class="text-sm text-gray-400">${price.toFixed(2).replace('.', ',')}</p>
-            <div class="flex items-center mt-2">
-              <button class="quantity-btn bg-gray-700 text-white rounded w-6 h-6 flex items-center justify-center" onclick="updateQuantity(${item.product.id}, 'decrease')">
-                <i class="fas fa-minus text-xs"></i>
-              </button>
-              <span class="mx-2 text-white">${item.quantity}</span>
-              <button class="quantity-btn bg-primary text-white rounded w-6 h-6 flex items-center justify-center" onclick="updateQuantity(${item.product.id}, 'increase')">
-                <i class="fas fa-plus text-xs"></i>
-              </button>
-              <button class="ml-auto text-gray-400 hover:text-red-500" onclick="removeFromCart(${item.product.id})">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </div>
-          </div>
-        `;
-        cartItems.appendChild(cartItem);
-      });
-      
-      // Calcular frete e total
-      const shipping = subtotal >= 100 ? 0 : 9.99;
-      const total = subtotal + shipping;
-      
-      // Atualizar totais
-      cartSubtotal.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
-      cartShipping.textContent = shipping === 0 ? 'Grátis' : `R$ ${shipping.toFixed(2).replace('.', ',')}`;
-      cartTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-      
-      // Atualizar badge
-      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-      cartBadge.textContent = totalItems;
-      cartBadge.classList.remove('hidden');
-      checkoutBtn.disabled = false;
-    }
-
-    function addToCart(productId) {
-      // Simular dados do produto (em uma aplicação real, isso viria de uma API)
-      const products = [
-        {
-          id: 1,
-          name: "Paracetamol 500mg",
-          price: 12.5,
-          discountPrice: 10.0,
-          image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Paracetamol",
-          hasDiscount: true,
-        },
-        {
-          id: 2,
-          name: "Dipirona 300mg",
-          price: 9.99,
-          image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dipirona",
-        },
-        {
-          id: 3,
-          name: "Amoxicilina 500mg",
-          price: 35.0,
-          image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Amoxicilina",
-        },
-        {
-          id: 4,
-          name: "Dorflex",
-          price: 15.0,
-          discountPrice: 12.5,
-          image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Dorflex",
-          hasDiscount: true,
-        },
-        {
-          id: 5,
-          name: "Vitamina C 1g",
-          price: 22.0,
-          image: "https://placehold.co/300x300/1F1F1F/FFFFFF?text=Vitamina+C",
-        }
-      ];
-      
-      const product = products.find(p => p.id === productId);
-      if (!product) return;
-      
-      const existingItem = cart.find(item => item.product.id === productId);
-      if (existingItem) {
-        existingItem.quantity++;
-      } else {
-        cart.push({
-          product: product,
-          quantity: 1
-        });
-      }
-      
-      updateCart();
-      showToast('Produto adicionado ao carrinho', 'success');
-    }
-
-    function updateQuantity(productId, action) {
-      const itemIndex = cart.findIndex(item => item.product.id === productId);
-      if (itemIndex === -1) return;
-      
-      if (action === 'increase') {
-        cart[itemIndex].quantity++;
-      } else if (action === 'decrease') {
-        cart[itemIndex].quantity--;
-        if (cart[itemIndex].quantity <= 0) {
-          cart.splice(itemIndex, 1);
-        }
-      }
-      
-      updateCart();
-    }
-
-    function removeFromCart(productId) {
-      cart = cart.filter(item => item.product.id !== productId);
-      updateCart();
-      showToast('Produto removido do carrinho', 'warning');
-    }
-
-    function checkout() {
-      if (cart.length === 0) return;
-      
-      let message = "Olá, gostaria de fazer o seguinte pedido:\n\n";
-      let subtotal = 0;
-      
-      cart.forEach(item => {
-        const price = item.product.hasDiscount ? item.product.discountPrice : item.product.price;
-        const itemTotal = price * item.quantity;
-        subtotal += itemTotal;
-        
-        message += `- ${item.product.name} (${item.quantity}x) - R$ ${itemTotal.toFixed(2).replace('.', ',')}\n`;
-      });
-      
-      const shipping = subtotal >= 100 ? 0 : 9.99;
-      const total = subtotal + shipping;
-      
-      message += `\nSubtotal: R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
-      message += `Frete: ${shipping === 0 ? 'Grátis' : `R$ ${shipping.toFixed(2).replace('.', ',')}`}\n`;
-      message += `Total: R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
-      message += "Por favor, confirme a disponibilidade e o prazo de entrega.";
-      
-      const whatsappNumber = "5511999999999";
-      const encodedMessage = encodeURIComponent(message);
-      window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
-    }
-
-    // Inicializar quando o DOM estiver pronto
-    document.addEventListener('DOMContentLoaded', () => {
-      // Atualizar UI de autenticação
-      updateAuthUI();
-      
-      // Menu Mobile
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const closeMenuBtn = document.getElementById('closeMenuBtn');
-      const mobileMenu = document.querySelector('.mobile-menu');
-      const menuOverlay = document.getElementById('menuOverlay');
-      
-      mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.add('open');
-        menuOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      });
-      
-      closeMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        menuOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-      
-      menuOverlay.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        menuOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-      
-      // Barra de pesquisa mobile
-      const searchBtn = document.getElementById('searchBtn');
-      const mobileSearch = document.getElementById('mobileSearch');
-      
-      searchBtn.addEventListener('click', () => {
-        mobileSearch.classList.toggle('hidden');
-      });
-      
-      // Modal de Autenticação
-      const authModal = document.getElementById('authModal');
-      const closeAuthModal = document.getElementById('closeAuthModal');
-      const userBtn = document.getElementById('userBtn');
-      const mobileUserBtn = document.getElementById('mobileUserBtn');
-      const authForm = document.getElementById('authForm');
-      const registerForm = document.getElementById('registerForm');
-      const showRegisterBtn = document.getElementById('showRegisterBtn');
-      const showLoginBtn = document.getElementById('showLoginBtn');
-      
-      userBtn.addEventListener('click', () => {
-        authModal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      });
-      
-      mobileUserBtn.addEventListener('click', () => {
-        authModal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-        mobileMenu.classList.remove('open');
-        menuOverlay.classList.remove('active');
-      });
-      
-      closeAuthModal.addEventListener('click', () => {
-        authModal.classList.add('hidden');
-        document.body.style.overflow = '';
-      });
-      
-      showRegisterBtn.addEventListener('click', () => {
-        authForm.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-      });
-      
-      showLoginBtn.addEventListener('click', () => {
-        registerForm.classList.add('hidden');
-        authForm.classList.remove('hidden');
-      });
-      
-      // Formulário de Login
-      authForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        
-        try {
-          await auth.login(email, password);
-          updateAuthUI();
-          authModal.classList.add('hidden');
-          document.body.style.overflow = '';
-          showToast('Login realizado com sucesso!', 'success');
-        } catch (error) {
-          showToast(error.message, 'error');
-        }
-      });
-      
-      // Formulário de Cadastro
-      registerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        const confirmPassword = document.getElementById('regConfirmPassword').value;
-        
-        if (password !== confirmPassword) {
-          showToast('As senhas não coincidem', 'error');
-          return;
-        }
-        
-        try {
-          await auth.register(name, email, password);
-          updateAuthUI();
-          registerForm.classList.add('hidden');
-          authForm.classList.remove('hidden');
-          showToast('Cadastro realizado com sucesso!', 'success');
-        } catch (error) {
-          showToast(error.message, 'error');
-        }
-      });
-      
-      // Carrinho
-      const cartBtn = document.getElementById('cartBtn');
-      const cartSidebar = document.getElementById('cartSidebar');
-      const closeCart = document.getElementById('closeCart');
-      const checkoutBtn = document.getElementById('checkoutBtn');
-      
-      cartBtn.addEventListener('click', () => {
-        cartSidebar.classList.remove('translate-x-full');
-        document.body.style.overflow = 'hidden';
-      });
-      
-      closeCart.addEventListener('click', () => {
-        cartSidebar.classList.add('translate-x-full');
-        document.body.style.overflow = '';
-      });
-      
-      checkoutBtn.addEventListener('click', checkout);
-      
-      // Fechar modais ao clicar fora
-      window.addEventListener('click', (e) => {
-        if (e.target === authModal) {
-          authModal.classList.add('hidden');
-          document.body.style.overflow = '';
-        }
-        
-        if (e.target === menuOverlay) {
-          mobileMenu.classList.remove('open');
-          menuOverlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-      
-      // Adicionar produtos ao carrinho (para demonstração)
-      window.addToCart = addToCart;
-      window.updateQuantity = updateQuantity;
-      window.removeFromCart = removeFromCart;
-    });
-  </script>
+ <script src="./scripit.js"></script>
 </body>
 </html>
