@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pharmacity - Finalizar Pedido</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #e50914;
+      --primary-dark: #b2070f;
+    }
+    
+    body {
+      background-color: #141414;
+      color: #e5e5e5;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .gradient-btn {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    }
+    
+    .gradient-btn:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="bg-gray-800 rounded-lg max-w-md w-full p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold">Finalizar Pedido</h3>
+      <a href="index1.html" class="text-gray-400 hover:text-white">
+        <i class="fas fa-times"></i>
+      </a>
+    </div>
+    
+    <form id="checkoutForm" class="space-y-4">
+      <div>
+        <label for="fullName" class="block text-sm font-medium mb-1">Nome Completo*</label>
+        <input type="text" id="fullName" required class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700">
+      </div>
+      
+      <div>
+        <label for="phone" class="block text-sm font-medium mb-1">WhatsApp*</label>
+        <input type="tel" id="phone" required class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700" placeholder="(00) 00000-0000">
+      </div>
+      
+      <div>
+        <label for="address" class="block text-sm font-medium mb-1">Endereço Completo*</label>
+        <textarea id="address" rows="3" required class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700" placeholder="Rua, Número, Bairro, Cidade - Estado"></textarea>
+      </div>
+      
+      <div>
+        <label for="paymentMethod" class="block text-sm font-medium mb-1">Forma de Pagamento*</label>
+        <select id="paymentMethod" required class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700">
+          <option value="">Selecione...</option>
+          <option value="Pix">Pix</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="Dinheiro">Dinheiro</option>
+        </select>
+      </div>
+      
+      <div>
+        <label for="notes" class="block text-sm font-medium mb-1">Observações</label>
+        <textarea id="notes" rows="2" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary border border-gray-700" placeholder="Alguma informação adicional..."></textarea>
+      </div>
+      
+      <button type="submit" class="w-full gradient-btn text-white font-semibold py-3 px-4 rounded-lg transition">
+        Confirmar Pedido via WhatsApp
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Recupera o carrinho do localStorage
+    const cart = JSON.parse(localStorage.getItem('pharmacity_cart')) || [];
+    const userData = JSON.parse(localStorage.getItem('pharmacity_user')) || {};
+
+    // Preenche com dados salvos se existirem
+    if (userData.fullName) document.getElementById('fullName').value = userData.fullName;
+    if (userData.phone) document.getElementById('phone').value = userData.phone;
+    if (userData.address) document.getElementById('address').value = userData.address;
+
+    // Máscara para telefone
+    document.getElementById('phone').addEventListener('input', function(e) {
+      const value = e.target.value.replace(/\D/g, '');
+      if (value.length > 11) return;
+      
+      let formatted = value;
+      if (value.length > 2) {
+        formatted = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+      }
+      if (value.length > 7) {
+        formatted = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7, 11)}`;
+      }
+      
+      e.target.value = formatted;
+    });
+
+    // Envia o pedido
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        fullName: document.getElementById('fullName').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        notes: document.getElementById('notes').value
+      };
+
+      // Salva os dados do usuário
+      localStorage.setItem('pharmacity_user', JSON.stringify(formData));
+      
+      // Calcula totais
+      const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+      const shipping = subtotal >= 100 ? 0 : 15;
+      const total = subtotal + shipping;
+
+      // Formata os itens do pedido
+      const itemsText = cart.map(item => 
+        `- ${item.name} (${item.quantity}x): R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}`
+      ).join('%0A');
+
+      // Cria mensagem para WhatsApp
+      const message = `📋 *NOVO PEDIDO PHARMACITY* 📋%0A%0A` +
+        `👤 *Cliente:* ${formData.fullName}%0A` +
+        `📱 *WhatsApp:* ${formData.phone}%0A` +
+        `🏠 *Endereço:* ${formData.address}%0A` +
+        `💳 *Pagamento:* ${formData.paymentMethod}%0A` +
+        (formData.notes ? `📝 *Observações:* ${formData.notes}%0A%0A` : '%0A') +
+        `🛒 *Itens do Pedido:*%0A${itemsText}%0A%0A` +
+        `📦 *Frete:* ${shipping === 0 ? 'Grátis' : 'R$ ' + shipping.toFixed(2).replace('.', ',')}%0A` +
+        `💰 *Total:* R$ ${total.toFixed(2).replace('.', ',')}%0A%0A` +
+        `Por favor, confirme o recebimento deste pedido e informe o prazo de entrega.`;
+
+      // Abre WhatsApp (SUBSTITUA SEU_NUMERO_AQUI)
+      window.open(`https://wa.me/81991152307?text=${message}`, '_blank');
+      
+      // Limpa o carrinho
+      localStorage.removeItem('pharmacity_cart');
+      
+      // Redireciona de volta para a página inicial após 2 segundos
+      setTimeout(() => {
+        window.location.href = 'index1.html';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
