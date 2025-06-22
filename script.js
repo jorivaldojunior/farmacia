@@ -143,7 +143,7 @@ function calculateDeliveryTime() {
 }
 
 // =============================================
-// FUNÇÕES DO CARRINHO
+// FUNÇÕES DO CARRINHO (COMPLETO)
 // =============================================
 function updateCart() {
   // Atualizar contador
@@ -254,6 +254,47 @@ function updateQuantity(productId, newQuantity) {
   }
 }
 
+function prepareCheckoutData() {
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const shipping = calculateShipping(subtotal);
+  const total = subtotal + shipping.cost;
+  
+  return {
+    items: cart.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      image: item.image,
+      total: item.price * item.quantity
+    })),
+    subtotal: subtotal,
+    shipping: shipping,
+    total: total,
+    deliveryTime: calculateDeliveryTime(),
+    user: userData ? {
+      name: userData.name,
+      email: userData.email
+    } : null
+  };
+}
+
+function checkout() {
+  if (cart.length === 0) {
+    showNotification('Seu carrinho está vazio', 'error');
+    return;
+  }
+
+  // Preparar dados do pedido
+  const checkoutData = prepareCheckoutData();
+  
+  // Salvar os dados do pedido no localStorage para a página de finalização
+  localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+  
+  // Redirecionar para a página de finalização do pedido
+  window.location.href = 'finalizar_pedido.html';
+}
+
 // =============================================
 // FUNÇÕES DE AUTENTICAÇÃO
 // =============================================
@@ -318,19 +359,12 @@ function showNotification(message, type = 'info') {
     info: 'bg-blue-500'
   };
   
-  const icon = {
-    success: 'fa-check-circle',
-    error: 'fa-exclamation-circle',
-    info: 'fa-info-circle'
-  };
-  
   const notification = document.createElement('div');
-  notification.className = `fixed bottom-20 right-6 ${colors[type]} text-white px-4 py-2 rounded-lg shadow-lg z-50 flex items-center animate-bounce`;
-  notification.innerHTML = `<i class="fas ${icon[type]} mr-2"></i> ${message}`;
+  notification.className = `fixed bottom-20 right-6 ${colors[type]} text-white px-4 py-2 rounded-lg shadow-lg z-50`;
+  notification.textContent = message;
   document.body.appendChild(notification);
   
   setTimeout(() => {
-    notification.classList.remove('animate-bounce');
     notification.classList.add('fade-out');
     setTimeout(() => notification.remove(), 300);
   }, 3000);
@@ -376,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
   cartBtn.addEventListener('click', toggleCart);
   closeCartBtn.addEventListener('click', toggleCart);
   cartOverlay.addEventListener('click', toggleCart);
+  checkoutBtn.addEventListener('click', checkout);
 
   // Formulários
   authForm.addEventListener('submit', (e) => {
@@ -423,3 +458,11 @@ window.updateQuantity = updateQuantity;
 window.removeFromCart = removeFromCart;
 window.toggleMobileMenu = toggleMobileMenu;
 window.toggleAuthModal = toggleAuthModal;
+window.checkout = checkout;
+
+
+
+
+
+
+
