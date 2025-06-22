@@ -16,6 +16,7 @@
       animation: bounceHorizontal 3s infinite ease-in-out;
       transform-origin: center bottom;
       width: 300px;
+      cursor: pointer;
     }
 
     @media (min-width: 768px) {
@@ -38,41 +39,17 @@
         transform: translateX(30px) scale(1.05, 0.95);
       }
     }
-
-    /* Botão circular moderno */
-    .btn-circular {
-      transition: all 0.3s ease;
-      animation: pulse 2s infinite ease-in-out;
-    }
-
-    .btn-circular:hover {
-      transform: scale(1.1);
-      background-color: #b91c1c;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-    }
   </style>
 </head>
 <body class="flex flex-col items-center justify-center h-screen text-center px-4">
 
-  <!-- LOGO COM ANIMAÇÃO -->
-  <img src="./image/logofarma.png" alt="Logo Farmácia Multimedic" class="logo-animada" />
-
-  <!-- BOTÃO REDONDO COM SETA -->
-  <button onclick="avancarPagina()" aria-label="Avançar"
-    class="btn-circular mt-16 w-20 h-20 flex items-center justify-center rounded-full bg-red-500 shadow-lg hover:shadow-xl">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24"
-      stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-    </svg>
-  </button>
+  <!-- LOGO COM ANIMAÇÃO E EVENTO DE CLIQUE -->
+  <img 
+    src="./image/logofarma.png" 
+    alt="Logo Farmácia Multimedic" 
+    class="logo-animada" 
+    onclick="avancarPagina()" 
+  />
 
   <!-- JS -->
   <script>
