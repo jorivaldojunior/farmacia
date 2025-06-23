@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medicamentos - Farmácia Multimedic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="shortcut icon" href="https://img.icons8.com/ios-filled/50/medical-doctor.png" type="image/x-icon">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <style>
+    .hide-scroll-bar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .hide-scroll-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Produtos em scroll horizontal */
+    .product-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding: 8px 0 16px 0;
+      scroll-snap-type: x mandatory;
+    }
+
+    @media (min-width: 640px) {
+      .product-scroll {
+        gap: 16px;
+      }
+    }
+
+    .product-card {
+      flex: 0 0 auto;
+      width: 140px;
+      scroll-snap-align: start;
+    }
+
+    @media (min-width: 640px) {
+      .product-card {
+        width: 160px;
+      }
+    }
+
+    /* Espaço para o menu inferior */
+    body {
+      padding-bottom: 72px;
+    }
+
+    /* Barra de pesquisa */
+    .search-container {
+      position: relative;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 10;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .search-item {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-item:hover {
+      background: #f5f5f5;
+    }
+
+    /* Modal de produto */
+    .product-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .product-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Cabeçalho -->
+  <header class="bg-white p-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <img src="./image/logofarma.png" alt="Farmácia Multimedic" class="w-10 h-10 md:w-12 md:h-12" />
+      </div>
+      <p class="text-blue-700 text-sm md:text-base">Óla, <span class="font-semibold">Visitante boas compras!</span></p>
+      <button class="text-white relative">
+        <ion-icon name="cart-outline" class="text-blue-700 w-6 h-6 md:w-8 md:h-8"></ion-icon>
+        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Barra de pesquisa inteligente -->
+  <div class="bg-white shadow">
+    <div class="max-w-6xl mx-auto px-4 py-3 search-container">
+      <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
+        <img src="https://img.icons8.com/ios-filled/20/1a237e/search--v1.png" class="mr-2" alt="Ícone de Busca" />
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Buscar em Medicamentos..."
+          class="bg-transparent outline-none flex-1 text-sm md:text-base text-[#1a237e] placeholder-gray-500"
+        />
+      </div>
+      <div id="search-results" class="search-results hide-scroll-bar" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <main class="max-w-6xl mx-auto">
+    <!-- Todos os produtos -->
+<section class="container-padding mt-6">
+  <h2 class="text-lg md:text-xl font-bold text-[#1a237e] mb-4">Todos os Medicamentos</h2>
+  
+  <div class="product-scroll hide-scroll-bar">
+    <!-- Produto 1 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Paracetamol 500mg 20 comprimidos">
+      <div class="relative">
+        <img src="./image/med1.jpg" alt="Paracetamol" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Paracetamol 500mg 20 comprimidos</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 12,90</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+    
+    <!-- Produto 2 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Ibuprofeno 400mg 10 comprimidos">
+      <div class="relative">
+        <img src="./image/med7.webp" alt="Ibuprofeno" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Ibuprofeno 400mg 10 comprimidos</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 15,90</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+    
+    <!-- Produto 3 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Dipirona 500mg 10 comprimidos">
+      <div class="relative">
+        <img src="./image/dipirona500.jpg" alt="Dipirona" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Dipirona 500mg 10 comprimidos</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 8,50</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+    
+    <!-- Produto 4 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Omeprazol 20mg 14 cápsulas">
+      <div class="relative">
+        <img src="./image/omeprazol.jpg" alt="Omeprazol" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Omeprazol 20mg 14 cápsulas</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 18,90</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+    
+    <!-- Produto 5 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Loratadina 10mg 12 comprimidos">
+      <div class="relative">
+        <img src="./image/loratadina.jpg" alt="Loratadina" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Loratadina 10mg 12 comprimidos</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 14,20</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+    
+    <!-- Produto 6 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Dorflex 30 comprimidos">
+      <div class="relative">
+        <img src="./image/Dorflex 30.jpg" alt="Dorflex" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Dorflex 30 comprimidos</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 22,50</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+
+    <!-- Produto 7 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Torsilax 4 comprimidos">
+      <div class="relative">
+        <img src="image/Torsilax.jpg" alt="Torsilax" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Torsilax 4 comprimidos</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 9,90</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+
+    <!-- Produto 8 -->
+    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Neosaldina 30 comprimidos">
+      <div class="relative">
+        <img src="./image/Neosaldina 30.jpg" alt="Neosaldina" class="w-full h-32 md:h-36 object-contain mb-2">
+      </div>
+      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Neosaldina 30 comprimidos</h3>
+      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 28,90</p>
+      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+  </div>
+</section>
+
+   
+
+        
+     
+  </main>
+
+  <!-- Modal de Produto -->
+  <div id="product-modal" class="product-modal">
+    <div class="modal-content p-6">
+      <div class="flex justify-between items-start mb-4">
+        <h3 id="modal-product-name" class="text-xl font-bold text-[#1a237e]"></h3>
+        <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+          <ion-icon name="close-outline" class="w-6 h-6"></ion-icon>
+        </button>
+      </div>
+      
+      <img id="modal-product-image" src="" alt="" class="w-full h-48 object-contain mb-4">
+      
+      <p id="modal-product-price" class="text-2xl font-bold text-[#e53935] mb-4"></p>
+      
+      <div class="flex items-center mb-4">
+        <button id="decrease-qty" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-l-lg">-</button>
+        <span id="product-qty" class="bg-gray-100 px-4 py-1">1</span>
+        <button id="increase-qty" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-r-lg">+</button>
+      </div>
+      
+      <button id="add-to-cart-modal" class="bg-[#e53935] hover:bg-[#c62828] text-white py-3 px-6 rounded-full w-full font-medium transition-colors">
+        Adicionar ao Carrinho
+      </button>
+    </div>
+  </div>
+
+  <!-- Menu inferior -->
+  <nav class="fixed bottom-0 w-full bg-white border-t shadow-lg flex justify-around items-center h-16 z-50">
+    <a href="i.html" class="flex flex-col items-center text-gray-500">
+      <ion-icon name="home-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Início</span>
+    </a>
+    <a href="#secao-categorias" class="flex flex-col items-center text-[#1a237e]">
+      <ion-icon name="apps-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Categorias</span>
+    </a>
+    <a href="ofertas.html" class="flex flex-col items-center text-gray-500">
+      <ion-icon name="pricetags-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Ofertas</span>
+    </a>
+    <a href="conta.html" class="flex flex-col items-center text-gray-500">
+      <ion-icon name="person-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Conta</span>
+    </a>
+  </nav>
+
+  <script>
+    // Banco de dados de produtos (simulado)
+    const products = [
+      { id: 1, name: "Paracetamol 500mg 20 comprimidos", price: "R$ 12,90", image: "./image/med1.jpg" },
+      { id: 2, name: "Ibuprofeno 400mg 10 comprimidos", price: "R$ 15,90", image: "./image/med7.webp" },
+      { id: 3, name: "Dipirona 500mg 10 comprimidos", price: "R$ 8,50", image: "./image/dipirona500.jpg" },
+      { id: 4, name: "Omeprazol 20mg 14 cápsulas", price: "R$ 18,90", image: "./image/omeprazol.jpg" },
+      { id: 5, name: "Loratadina 10mg 12 comprimidos", price: "R$ 14,20", image: "./image/loratadina.jpg" },
+      { id: 6, name: "Dorflex 30 comprimidos", price: "R$ 14,20", image: "./image/Dorflex 30.jpg" },
+      { id: 7, name: "Torsilax 4 comprimidos", price: "R$ 9,90", image: "image/Torsilax.jpg" },
+      { id: 8, name: "Neosaldina 30 comprimidos", price: "R$ 28,90", image: "./image/Neosaldina 30.jpg" },
+      { id: 9, name: "Buscopan 20 comprimidos", price: "R$ 17,50", image: "./image/med4.jpg" },
+      { id: 10, name: "Advil 400mg 10 comprimidos", price: "R$ 16,90", image: "./image/med5.jpg" },
+      { id: 11, name: "Dramin 10 comprimidos", price: "R$ 12,30", image: "./image/med6.jpg" },
+      { id: 12, name: "Cimegripe 10 comprimidos", price: "R$ 14,90", image: "./image/med8.jpg" },
+      { id: 13, name: "Nimesulida 100mg 12 comprimidos", price: "R$ 19,90", image: "./image/med9.jpg" },
+      { id: 14, name: "Rinosoro 30ml", price: "R$ 11,50", image: "./image/med10.jpg" }
+    ];
+
+    // Carrinho de compras
+    let cart = [];
+    let cartCount = 0;
+
+    // Elementos do DOM
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    const cartCountElement = document.getElementById('cart-count');
+    const productModal = document.getElementById('product-modal');
+    const modalProductName = document.getElementById('modal-product-name');
+    const modalProductImage = document.getElementById('modal-product-image');
+    const modalProductPrice = document.getElementById('modal-product-price');
+    const productQty = document.getElementById('product-qty');
+    const decreaseQty = document.getElementById('decrease-qty');
+    const increaseQty = document.getElementById('increase-qty');
+    const addToCartModal = document.getElementById('add-to-cart-modal');
+    const closeModal = document.getElementById('close-modal');
+    let currentProduct = null;
+
+    // Função para atualizar o contador do carrinho
+    function updateCartCount() {
+      cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+      cartCountElement.textContent = cartCount;
+    }
+
+    // Função para buscar produtos
+    function searchProducts(query) {
+      if (query.length < 2) {
+        searchResults.style.display = 'none';
+        return;
+      }
+
+      const results = products.filter(product =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      if (results.length > 0) {
+        searchResults.innerHTML = results.map(product => `
+          <div class="search-item" data-id="${product.id}">
+            <div class="flex items-center">
+              <img src="${product.image}" alt="${product.name}" class="w-10 h-10 object-contain mr-3">
+              <div>
+                <p class="text-sm font-medium">${product.name}</p>
+                <p class="text-xs text-gray-500">${product.price}</p>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        searchResults.style.display = 'block';
+      } else {
+        searchResults.innerHTML = '<div class="search-item text-center py-4">Nenhum produto encontrado</div>';
+        searchResults.style.display = 'block';
+      }
+    }
+
+    // Função para abrir o modal do produto
+    function openProductModal(product) {
+      currentProduct = product;
+      modalProductName.textContent = product.name;
+      modalProductImage.src = product.image;
+      modalProductPrice.textContent = product.price;
+      productQty.textContent = '1';
+      productModal.classList.add('active');
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', (e) => {
+      searchProducts(e.target.value);
+    });
+
+    searchResults.addEventListener('click', (e) => {
+      const searchItem = e.target.closest('.search-item');
+      if (searchItem) {
+        const productId = parseInt(searchItem.dataset.id);
+        const product = products.find(p => p.id === productId);
+        if (product) {
+          openProductModal(product);
+          searchInput.value = '';
+          searchResults.style.display = 'none';
+        }
+      }
+    });
+
+    // Adicionar ao carrinho (produtos na lista)
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const productCard = e.target.closest('.product-card');
+        const productName = productCard.dataset.product;
+        const product = products.find(p => p.name === productName);
+        
+        if (product) {
+          const existingItem = cart.find(item => item.id === product.id);
+          if (existingItem) {
+            existingItem.quantity += 1;
+          } else {
+            cart.push({ ...product, quantity: 1 });
+          }
+          updateCartCount();
+          
+          // Feedback visual
+          button.textContent = 'Adicionado!';
+          button.classList.remove('bg-[#e53935]', 'hover:bg-[#c62828]');
+          button.classList.add('bg-green-500', 'hover:bg-green-600');
+          setTimeout(() => {
+            button.textContent = 'Adicionar ao Carrinho';
+            button.classList.remove('bg-green-500', 'hover:bg-green-600');
+            button.classList.add('bg-[#e53935]', 'hover:bg-[#c62828]');
+          }, 1500);
+        }
+      });
+    });
+
+    // Abrir modal ao clicar em um produto
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('add-to-cart')) {
+          const productName = card.dataset.product;
+          const product = products.find(p => p.name === productName);
+          if (product) {
+            openProductModal(product);
+          }
+        }
+      });
+    });
+
+    // Controle de quantidade no modal
+    decreaseQty.addEventListener('click', () => {
+      let qty = parseInt(productQty.textContent);
+      if (qty > 1) {
+        qty--;
+        productQty.textContent = qty;
+      }
+    });
+
+    increaseQty.addEventListener('click', () => {
+      let qty = parseInt(productQty.textContent);
+      qty++;
+      productQty.textContent = qty;
+    });
+
+    // Adicionar ao carrinho pelo modal
+    addToCartModal.addEventListener('click', () => {
+      if (currentProduct) {
+        const qty = parseInt(productQty.textContent);
+        const existingItem = cart.find(item => item.id === currentProduct.id);
+        
+        if (existingItem) {
+          existingItem.quantity += qty;
+        } else {
+          cart.push({ ...currentProduct, quantity: qty });
+        }
+        
+        updateCartCount();
+        productModal.classList.remove('active');
+        
+        // Feedback visual
+        const addButton = document.querySelector(`.product-card[data-product="${currentProduct.name}"] .add-to-cart`);
+        if (addButton) {
+          addButton.textContent = 'Adicionado!';
+          addButton.classList.remove('bg-[#e53935]', 'hover:bg-[#c62828]');
+          addButton.classList.add('bg-green-500', 'hover:bg-green-600');
+          setTimeout(() => {
+            addButton.textContent = 'Adicionar ao Carrinho';
+            addButton.classList.remove('bg-green-500', 'hover:bg-green-600');
+            addButton.classList.add('bg-[#e53935]', 'hover:bg-[#c62828]');
+          }, 1500);
+        }
+      }
+    });
+
+    // Fechar modal
+    closeModal.addEventListener('click', () => {
+      productModal.classList.remove('active');
+    });
+
+    // Fechar modal ao clicar fora
+    productModal.addEventListener('click', (e) => {
+      if (e.target === productModal) {
+        productModal.classList.remove('active');
+      }
+    });
+
+    // Fechar resultados de busca ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (e.target !== searchInput && e.target !== searchResults) {
+        searchResults.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
