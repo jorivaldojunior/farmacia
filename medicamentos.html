@@ -109,6 +109,43 @@
       max-height: 90vh;
       overflow-y: auto;
     }
+
+    /* Estilos para as setas de navegação */
+    .scroll-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .scroll-button:hover {
+      background: #f5f5f5;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .scroll-button.left {
+      left: -20px;
+    }
+
+    .scroll-button.right {
+      right: -20px;
+    }
+
+    @media (max-width: 767px) {
+      .scroll-button {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -146,112 +183,120 @@
   <!-- Conteúdo principal -->
   <main class="max-w-6xl mx-auto">
     <!-- Todos os produtos -->
-<section class="container-padding mt-6">
-  <h2 class="text-lg md:text-xl font-bold text-[#1a237e] mb-4">Todos os Medicamentos</h2>
-  
-  <div class="product-scroll hide-scroll-bar">
-    <!-- Produto 1 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Paracetamol 500mg 20 comprimidos">
+    <section class="container-padding mt-6 relative">
+      <h2 class="text-lg md:text-xl font-bold text-[#1a237e] mb-4">Todos os Medicamentos</h2>
+      
       <div class="relative">
-        <img src="./image/med1.jpg" alt="Paracetamol" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Paracetamol 500mg 20 comprimidos</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 12,90</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-    
-    <!-- Produto 2 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Ibuprofeno 400mg 10 comprimidos">
-      <div class="relative">
-        <img src="./image/med7.webp" alt="Ibuprofeno" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Ibuprofeno 400mg 10 comprimidos</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 15,90</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-    
-    <!-- Produto 3 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Dipirona 500mg 10 comprimidos">
-      <div class="relative">
-        <img src="./image/dipirona500.jpg" alt="Dipirona" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Dipirona 500mg 10 comprimidos</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 8,50</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-    
-    <!-- Produto 4 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Omeprazol 20mg 14 cápsulas">
-      <div class="relative">
-        <img src="./image/omeprazol.jpg" alt="Omeprazol" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Omeprazol 20mg 14 cápsulas</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 18,90</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-    
-    <!-- Produto 5 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Loratadina 10mg 12 comprimidos">
-      <div class="relative">
-        <img src="./image/loratadina.jpg" alt="Loratadina" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Loratadina 10mg 12 comprimidos</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 14,20</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-    
-    <!-- Produto 6 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Dorflex 30 comprimidos">
-      <div class="relative">
-        <img src="./image/Dorflex 30.jpg" alt="Dorflex" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Dorflex 30 comprimidos</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 22,50</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-
-    <!-- Produto 7 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Torsilax 4 comprimidos">
-      <div class="relative">
-        <img src="image/Torsilax.jpg" alt="Torsilax" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Torsilax 4 comprimidos</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 9,90</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-
-    <!-- Produto 8 -->
-    <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Neosaldina 30 comprimidos">
-      <div class="relative">
-        <img src="./image/Neosaldina 30.jpg" alt="Neosaldina" class="w-full h-32 md:h-36 object-contain mb-2">
-      </div>
-      <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Neosaldina 30 comprimidos</h3>
-      <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 28,90</p>
-      <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
-        Adicionar ao Carrinho
-      </button>
-    </div>
-  </div>
-</section>
-
-   
-
+        <!-- Seta esquerda -->
+        <button id="scroll-left" class="scroll-button left hidden md:flex">
+          <ion-icon name="chevron-back-outline" class="text-[#1a237e] w-6 h-6"></ion-icon>
+        </button>
         
-     
+        <!-- Seta direita -->
+        <button id="scroll-right" class="scroll-button right hidden md:flex">
+          <ion-icon name="chevron-forward-outline" class="text-[#1a237e] w-6 h-6"></ion-icon>
+        </button>
+        
+        <!-- Container do scroll -->
+        <div id="product-scroll" class="product-scroll hide-scroll-bar">
+          <!-- Produto 1 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Paracetamol 500mg 20 comprimidos">
+            <div class="relative">
+              <img src="./image/med1.jpg" alt="Paracetamol" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Paracetamol 500mg 20 comprimidos</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 12,90</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+          
+          <!-- Produto 2 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Ibuprofeno 400mg 10 comprimidos">
+            <div class="relative">
+              <img src="./image/med7.webp" alt="Ibuprofeno" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Ibuprofeno 400mg 10 comprimidos</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 15,90</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+          
+          <!-- Produto 3 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Dipirona 500mg 10 comprimidos">
+            <div class="relative">
+              <img src="./image/dipirona500.jpg" alt="Dipirona" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Dipirona 500mg 10 comprimidos</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 8,50</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+          
+          <!-- Produto 4 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Omeprazol 20mg 14 cápsulas">
+            <div class="relative">
+              <img src="./image/omeprazol.jpg" alt="Omeprazol" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Omeprazol 20mg 14 cápsulas</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 18,90</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+          
+          <!-- Produto 5 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Loratadina 10mg 12 comprimidos">
+            <div class="relative">
+              <img src="./image/loratadina.jpg" alt="Loratadina" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Loratadina 10mg 12 comprimidos</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 14,20</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+          
+          <!-- Produto 6 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Dorflex 30 comprimidos">
+            <div class="relative">
+              <img src="./image/Dorflex 30.jpg" alt="Dorflex" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Dorflex 30 comprimidos</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 22,50</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+
+          <!-- Produto 7 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Torsilax 4 comprimidos">
+            <div class="relative">
+              <img src="image/Torsilax.jpg" alt="Torsilax" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Torsilax 4 comprimidos</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 9,90</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+
+          <!-- Produto 8 -->
+          <div class="product-card bg-white rounded-lg shadow-md p-3 flex flex-col" data-product="Neosaldina 30 comprimidos">
+            <div class="relative">
+              <img src="./image/Neosaldina 30.jpg" alt="Neosaldina" class="w-full h-32 md:h-36 object-contain mb-2">
+            </div>
+            <h3 class="text-sm md:text-base font-medium text-[#1a237e] line-clamp-2">Neosaldina 30 comprimidos</h3>
+            <p class="text-lg md:text-xl font-bold text-[#e53935] mt-1">R$ 28,90</p>
+            <button class="bg-[#e53935] hover:bg-[#c62828] text-white text-xs md:text-sm py-2 px-3 rounded-full mt-2 w-full transition-colors add-to-cart">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Modal de Produto -->
@@ -336,6 +381,9 @@
     const increaseQty = document.getElementById('increase-qty');
     const addToCartModal = document.getElementById('add-to-cart-modal');
     const closeModal = document.getElementById('close-modal');
+    const scrollContainer = document.getElementById('product-scroll');
+    const scrollLeftBtn = document.getElementById('scroll-left');
+    const scrollRightBtn = document.getElementById('scroll-right');
     let currentProduct = null;
 
     // Função para atualizar o contador do carrinho
@@ -382,6 +430,14 @@
       modalProductPrice.textContent = product.price;
       productQty.textContent = '1';
       productModal.classList.add('active');
+    }
+
+    // Função para verificar a posição do scroll e mostrar/ocultar setas
+    function checkScroll() {
+      if (scrollContainer && scrollLeftBtn && scrollRightBtn) {
+        scrollLeftBtn.style.display = scrollContainer.scrollLeft > 0 ? 'flex' : 'none';
+        scrollRightBtn.style.display = scrollContainer.scrollLeft < (scrollContainer.scrollWidth - scrollContainer.clientWidth) ? 'flex' : 'none';
+      }
     }
 
     // Event listeners
@@ -507,6 +563,32 @@
         searchResults.style.display = 'none';
       }
     });
+
+    // Controle das setas de scroll
+    if (scrollContainer && scrollLeftBtn && scrollRightBtn) {
+      // Seta direita - avança o scroll
+      scrollRightBtn.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+          left: 300,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Seta esquerda - retrocede o scroll
+      scrollLeftBtn.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+          left: -300,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Verifica a posição do scroll periodicamente e quando o usuário scrolla
+      scrollContainer.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      
+      // Verificação inicial
+      checkScroll();
+    }
   </script>
 </body>
 </html>
