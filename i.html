@@ -328,8 +328,8 @@
       </div>
     </section>
 
-    <!-- Seção de categorias -->
-    <section class="container-padding section-spacing">
+    <!-- Seção de categorias (ADICIONEI O ID AQUI) -->
+    <section id="secao-categorias" class="container-padding section-spacing">
       <div class="flex justify-between items-center mb-3">
         <h2 class="text-lg md:text-xl font-bold text-[#1a237e]">Categorias</h2>
         <a href="#" class="text-[#e53935] text-sm md:text-base font-medium flex items-center">
@@ -337,19 +337,19 @@
         </a>
       </div>
       <div class="grid grid-cols-4 gap-3 md:gap-4">
-        <a href="#" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
+        <a href="medicamentos.html" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
           <img src="https://img.icons8.com/ios-filled/40/1a237e/pill.png" alt="Medicamentos" class="w-8 h-8 md:w-10 md:h-10">
           <p class="mt-2 text-xs md:text-sm text-center text-[#1a237e]">Medicamentos</p>
         </a>
-        <a href="#" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
+        <a href="beleza.html" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
           <img src="https://img.icons8.com/ios-filled/40/1a237e/lipstick.png" alt="Beleza" class="w-8 h-8 md:w-10 md:h-10">
           <p class="mt-2 text-xs md:text-sm text-center text-[#1a237e]">Beleza</p>
         </a>
-        <a href="#" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
+        <a href="bebes.html" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
           <img src="https://img.icons8.com/ios-filled/40/1a237e/baby.png" alt="Bebês" class="w-8 h-8 md:w-10 md:h-10">
           <p class="mt-2 text-xs md:text-sm text-center text-[#1a237e]">Bebês</p>
         </a>
-        <a href="#" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
+        <a href="saude.html" class="bg-white rounded-xl p-3 shadow flex flex-col items-center hover:shadow-md transition-shadow">
           <img src="https://img.icons8.com/ios-filled/40/1a237e/heart-health.png" alt="Saúde" class="w-8 h-8 md:w-10 md:h-10">
           <p class="mt-2 text-xs md:text-sm text-center text-[#1a237e]">Saúde</p>
         </a>
@@ -371,14 +371,14 @@
     </section>
   </main>
 
-  <!-- Menu inferior -->
+  <!-- Menu inferior (MODIFIQUEI APENAS O LINK DE CATEGORIAS) -->
   <nav class="fixed bottom-0 w-full bg-white border-t shadow-lg flex justify-around items-center h-16 z-50">
     <!-- Ícone Home - leva para a página inicial -->
-    <a href="index.html" class="flex flex-col items-center text-[#1a237e]">
+    <a href="i.html" class="flex flex-col items-center text-[#1a237e]">
       <ion-icon name="home-outline" class="w-6 h-6"></ion-icon>
       <span class="text-xs mt-1">Início</span>
     </a>
-    <a href="#" class="flex flex-col items-center text-gray-500">
+    <a href="#secao-categorias" class="flex flex-col items-center text-gray-500">
       <ion-icon name="apps-outline" class="w-6 h-6"></ion-icon>
       <span class="text-xs mt-1">Categorias</span>
     </a>
@@ -387,12 +387,12 @@
       <span class="text-xs mt-1">Ofertas</span>
     </a>
     <a href="#" class="flex flex-col items-center text-gray-500">
-      <ion-icon name="heart-outline" class="w-6 h-6"></ion-icon>
-      <span class="text-xs mt-1">Favoritos</span>
-    </a>
-    <a href="#" class="flex flex-col items-center text-gray-500">
       <ion-icon name="person-outline" class="w-6 h-6"></ion-icon>
       <span class="text-xs mt-1">Conta</span>
+    </a>
+    <a href="index.html" class="flex flex-col items-center text-gray-500">
+      <ion-icon name="exit-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Sair</span>
     </a>
   </nav>
 
