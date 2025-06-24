@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmácia Multimedic - Contato</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="shortcut icon" href="https://img.icons8.com/ios-filled/50/medical-doctor.png" type="image/x-icon">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <style>
+    body {
+      padding-bottom: 72px;
+    }
+
+    .time-plate {
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 0 auto;
+      max-width: 600px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .map-container {
+      width: 100%;
+      height: 250px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .map-container {
+        height: 300px;
+      }
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 14px;
+    }
+
+    .form-button {
+      background-color: #e53935;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .form-button:hover {
+      background-color: #c62828;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Cabeçalho -->
+  <header class="bg-white p-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <img src="./image/logofarma.png" alt="Farmácia Multimedic" class="w-10 h-10 md:w-12 md:h-12" />
+      </div>
+      <p class="text-blue-700 text-sm md:text-base">Olá, seja <span class="font-semibold">bem-vindo à farmácia</span></p>
+      <a href="#" class="flex flex-col items-center text-blue-700">
+        <ion-icon name="person-outline" class="w-6 h-6"></ion-icon>
+      </a>
+    </div>
+  </header>
+
+  <!-- Placa de horário -->
+  <div class="bg-white shadow">
+    <div class="max-w-6xl mx-auto px-4 py-3">
+      <div class="time-plate" id="statusHorario">
+        <p class="text-lg font-medium">Funcionamento: <span class="font-bold">08:00 às 23:00</span></p>
+        <p class="text-sm">Domingo a Domingo</p>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-6xl mx-auto px-4 mt-6">
+
+    <!-- Mapa -->
+    <section class="mb-8">
+      <h2 class="text-lg md:text-xl font-bold text-[#1a237e] mb-3">Nossa Localização</h2>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps?q=Av.%20Nelson%20Ferreira,%2060%20-%20Maranguape%20I,%20Paulista%20-%20PE,%2053441-360&output=embed"
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="mb-10">
+      <h2 class="text-lg md:text-xl font-bold text-[#1a237e] mb-3">Fale Conosco</h2>
+      <form class="bg-white rounded-xl shadow-lg p-6" id="formContato">
+        <input type="text" placeholder="Seu nome" class="form-input" required>
+        <input type="email" placeholder="Seu e-mail" class="form-input" required>
+        <input type="tel" placeholder="Seu telefone" class="form-input" required>
+        <textarea placeholder="Sua mensagem" rows="4" class="form-input" required></textarea>
+        <button type="submit" class="form-button">Enviar via WhatsApp</button>
+      </form>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-white rounded-xl shadow-lg p-6">
+      <h3 class="text-lg font-bold text-[#1a237e] mb-4">Nos acompanhe</h3>
+      <div class="flex justify-center space-x-6">
+        <a href="https://wa.me/5581991152307" target="_blank" class="text-[#1a237e] hover:text-[#e53935] transition-colors">
+          <ion-icon name="logo-whatsapp" class="w-8 h-8"></ion-icon>
+        </a>
+        <a href="https://www.instagram.com/reel/C53VaUFLw8y/" target="_blank" class="text-[#1a237e] hover:text-[#e53935] transition-colors">
+          <ion-icon name="logo-instagram" class="w-8 h-8"></ion-icon>
+        </a>
+      </div>
+
+      <div class="mt-6 text-center text-sm text-gray-600">
+        <p>Farmácia Multimedic © 2024 - Todos os direitos reservados</p>
+        <p class="mt-2">Av. Nelson Ferreira, 60 - Maranguape I, Paulista - PE, 53441-360</p>
+        <p class="mt-1">CNPJ: 12.345.678/0001-99</p>
+        <p class="mt-1">Telefone: (81) 9989-9019 | E-mail: farma.multimedic@gmail.com</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Menu inferior -->
+  <nav class="fixed bottom-0 w-full bg-white border-t shadow-lg flex justify-around items-center h-16 z-50">
+    <a href="i.html" class="flex flex-col items-center text-gray-500">
+      <ion-icon name="home-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Início</span>
+    </a>
+    <a href="#secao-categorias" class="flex flex-col items-center text-gray-500">
+      <ion-icon name="apps-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Categorias</span>
+    </a>
+    <a href="contato.html" class="flex flex-col items-center text-[#1a237e]">
+      <ion-icon name="call-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Contato</span>
+    </a>
+    <a href="index.html" class="flex flex-col items-center text-gray-500">
+      <ion-icon name="exit-outline" class="w-6 h-6"></ion-icon>
+      <span class="text-xs mt-1">Sair</span>
+    </a>
+  </nav>
+
+  <script>
+    // Atualizar horário de funcionamento
+    const atualizarStatusHorario = () => {
+      const agora = new Date();
+      const hora = agora.getHours();
+      const aberto = hora >= 8 && hora < 23;
+      const placa = document.getElementById('statusHorario');
+
+      placa.innerHTML = `
+        <p class="text-lg font-medium">
+          Funcionamento: <span class="font-bold">${aberto ? 'Aberto agora' : 'Fechado no momento'}</span>
+        </p>
+        <p class="text-sm">Domingo a Domingo, das 08h às 23h</p>
+      `;
+      placa.style.backgroundColor = aberto ? '#34d399' : '#ef4444';
+      placa.style.color = '#fff';
+    };
+    atualizarStatusHorario();
+
+    // Envio do formulário via WhatsApp
+    document.getElementById('formContato').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const nome = this.querySelector('input[placeholder="Seu nome"]').value.trim();
+      const email = this.querySelector('input[placeholder="Seu e-mail"]').value.trim();
+      const telefone = this.querySelector('input[placeholder="Seu telefone"]').value.trim();
+      const mensagem = this.querySelector('textarea').value.trim();
+
+      const texto = `Olá! Meu nome é ${nome}.\nEmail: ${email}\nTelefone: ${telefone}\nMensagem: ${mensagem}`;
+      const url = `https://wa.me/5581991152307?text=${encodeURIComponent(texto)}`;
+      window.open(url, '_blank');
+    });
+  </script>
+
+</body>
+</html>
