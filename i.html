@@ -133,6 +133,15 @@
         margin-top: 2rem;
       }
     }
+
+    .time-plate {
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 0 auto;
+      max-width: 600px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -152,16 +161,12 @@
     </div>
   </header>
 
-  <!-- Barra de pesquisa -->
+ <!-- Placa de horário -->
   <div class="bg-white shadow">
     <div class="max-w-6xl mx-auto px-4 py-3">
-      <div class="flex items-center bg-gray-100 rounded-full px-4 py-2">
-        <img src="https://img.icons8.com/ios-filled/20/1a237e/search--v1.png" class="mr-2" alt="Ícone de Busca" />
-        <input
-          type="text"
-          placeholder="O que você procura?"
-          class="bg-transparent outline-none flex-1 text-sm md:text-base text-[#1a237e] placeholder-gray-500"
-        />
+      <div class="time-plate" id="statusHorario">
+        <p class="text-lg font-medium">Funcionamento: <span class="font-bold">08:00 às 23:00</span></p>
+        <p class="text-sm">Domingo a Domingo</p>
       </div>
     </div>
   </div>
@@ -418,6 +423,24 @@
       // Inicia o carrossel automático
       setInterval(updateCarousel, 3000);
     });
+
+     // Atualizar horário de funcionamento
+    const atualizarStatusHorario = () => {
+      const agora = new Date();
+      const hora = agora.getHours();
+      const aberto = hora >= 8 && hora < 23;
+      const placa = document.getElementById('statusHorario');
+
+      placa.innerHTML = `
+        <p class="text-lg font-medium">
+          Funcionamento: <span class="font-bold">${aberto ? 'Aberto agora' : 'Fechado no momento'}</span>
+        </p>
+        <p class="text-sm">Domingo a Domingo, das 08h às 23h</p>
+      `;
+      placa.style.backgroundColor = aberto ? '#34d399' : '#ef4444';
+      placa.style.color = '#fff';
+    };
+    atualizarStatusHorario();
   </script>
 
 </body>
