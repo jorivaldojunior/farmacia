@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carrinho - Farmácia Multimedic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="shortcut icon"
+      href="https://img.icons8.com/ios-filled/50/medical-doctor.png"
+      type="image/x-icon"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <style>
+      .hide-scroll-bar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .hide-scroll-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      body {
+        padding-bottom: 72px;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <header class="bg-white p-4 shadow-md sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <img
+            src="./image/logofarma.png"
+            alt="Farmácia Multimedic"
+            class="w-10 h-10 md:w-12 md:h-12"
+          />
+        </div>
+        <p class="text-blue-700 text-sm md:text-base">Meu Carrinho</p>
+        <a href="carrinho.html" class="text-white relative">
+          <ion-icon
+            name="cart-outline"
+            class="text-blue-700 w-6 h-6 md:w-8 md:h-8"
+          ></ion-icon>
+          <span
+            id="cart-count"
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+            >0</span
+          >
+        </a>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-4">
+      <section class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <h2 class="text-lg font-bold text-[#1a237e] mb-4">Itens no Carrinho</h2>
+        <div id="cart-items" class="space-y-4"></div>
+        <div class="border-t border-gray-200 mt-4 pt-4">
+          <div class="flex justify-between font-semibold text-lg">
+            <span>Subtotal:</span>
+            <span id="subtotal">R$ 0,00</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <h2 class="text-lg font-bold text-[#1a237e] mb-4">
+          Informações de Entrega
+        </h2>
+
+        <div id="address-fields">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Endereço Completo (Rua, Bairro, Cidade - UF, CEP)</label
+            >
+            <input
+              type="text"
+              id="delivery-address"
+              placeholder="Ex: Rua das Flores, 123, Centro, Recife - PE, 50000-000"
+              class="w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Número</label
+            >
+            <input
+              type="text"
+              id="address-number"
+              class="w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Complemento (opcional)</label
+            >
+            <input
+              type="text"
+              id="address-complement"
+              class="w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+
+        <div
+          id="delivery-fee-container"
+          class="border-t border-gray-200 pt-4 hidden"
+        >
+          <div class="flex justify-between font-semibold">
+            <span>Taxa de Entrega:</span>
+            <span id="delivery-fee">R$ 0,00</span>
+          </div>
+          <p
+            id="free-delivery-message"
+            class="text-green-600 text-sm mt-1 hidden"
+          >
+            Frete grátis!
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="payment-section"
+        class="bg-white rounded-lg shadow-md p-4 mb-4 hidden"
+      >
+        <h2 class="text-lg font-bold text-[#1a237e] mb-4">
+          Forma de Pagamento
+        </h2>
+
+        <div class="space-y-3">
+          <div class="flex items-center">
+            <input
+              type="radio"
+              id="payment-pix"
+              name="payment"
+              value="PIX"
+              class="mr-2"
+              checked
+            />
+            <label for="payment-pix" class="flex items-center">
+              <img
+                src="https://logospng.org/download/pix/logo-pix-icone-256.png"
+                alt="PIX"
+                class="w-6 h-6 mr-2"
+              />
+              PIX
+            </label>
+          </div>
+
+          <div class="flex items-center">
+            <input
+              type="radio"
+              id="payment-card"
+              name="payment"
+              value="Cartão de Crédito"
+              class="mr-2"
+            />
+            <label for="payment-card" class="flex items-center">
+              <ion-icon name="card-outline" class="w-6 h-6 mr-2"></ion-icon>
+              Cartão de Crédito
+            </label>
+          </div>
+
+          <div class="flex items-center">
+            <input
+              type="radio"
+              id="payment-money"
+              name="payment"
+              value="Dinheiro"
+              class="mr-2"
+            />
+            <label for="payment-money" class="flex items-center">
+              <ion-icon name="cash-outline" class="w-6 h-6 mr-2"></ion-icon>
+              Dinheiro
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <h2 class="text-lg font-bold text-[#1a237e] mb-4">Resumo do Pedido</h2>
+
+        <div class="space-y-2 mb-4">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Subtotal:</span>
+            <span id="summary-subtotal">R$ 0,00</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Taxa de Entrega:</span>
+            <span id="summary-delivery">R$ 0,00</span>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-4">
+          <div class="flex justify-between font-bold text-lg">
+            <span>Total:</span>
+            <span id="total">R$ 0,00</span>
+          </div>
+        </div>
+      </section>
+
+      <button
+        id="finish-order"
+        class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium text-lg mb-16 hidden"
+      >
+        Finalizar Pedido via WhatsApp
+      </button>
+    </main>
+
+    <nav
+      class="fixed bottom-0 w-full bg-white border-t shadow-lg flex justify-around items-center h-16 z-50"
+    >
+      <a href="i.html" class="flex flex-col items-center text-gray-500">
+        <ion-icon name="home-outline" class="w-6 h-6"></ion-icon>
+        <span class="text-xs mt-1">Início</span>
+      </a>
+
+      <a
+        href="./medicamentos.html"
+        class="flex flex-col items-center text-gray-500"
+      >
+        <img
+          src="https://img.icons8.com/ios-filled/40/1a237e/pill.png"
+          alt="Remédios"
+          class="w-6 h-6"
+        />
+        <span class="text-xs mt-1">Remédios</span>
+      </a>
+
+      <a href="./i.html" class="flex flex-col items-center text-blue-700">
+        <ion-icon name="pricetags-outline" class="w-6 h-6"></ion-icon>
+        <span class="text-xs mt-1">Promoções</span>
+      </a>
+      <a href="perfil.html" class="flex flex-col items-center text-gray-500">
+        <ion-icon name="person-outline" class="w-6 h-6"></ion-icon>
+        <span class="text-xs mt-1">Perfil</span>
+      </a>
+    </nav>
+
+    <script>
+      // Dados persistidos
+      // Removi 'cep', 'city', 'state' pois o endereço será digitado livremente
+      let deliveryData = JSON.parse(localStorage.getItem("deliveryData")) || {
+        address: "",
+        number: "",
+        complement: "",
+      };
+
+      // Constantes para o cálculo do frete
+      const FIXED_DELIVERY_FEE = 10.0;
+      const FREE_DELIVERY_THRESHOLD = 100.0;
+
+      // Função para carregar itens do carrinho do localStorage
+      function loadCartItems() {
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartContainer = document.getElementById("cart-items");
+        const cartCount = document.getElementById("cart-count");
+        const subtotalElement = document.getElementById("subtotal");
+        const summarySubtotal = document.getElementById("summary-subtotal");
+
+        let subtotal = 0;
+
+        // Limpa o container antes de adicionar os itens
+        cartContainer.innerHTML = "";
+
+        if (cartItems.length === 0) {
+          cartContainer.innerHTML =
+            '<p class="text-gray-500 text-center py-4">Seu carrinho está vazio</p>';
+          cartCount.textContent = "0";
+          subtotalElement.textContent = "R$ 0,00";
+          summarySubtotal.textContent = "R$ 0,00";
+          updateTotal(0); // Atualiza o total com subtotal 0
+          hideSectionsForEmptyCart();
+          return;
+        }
+
+        // Atualiza o contador do carrinho
+        cartCount.textContent = cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+
+        // Adiciona cada item ao carrinho
+        cartItems.forEach((item, index) => {
+          const itemElement = document.createElement("div");
+          itemElement.className =
+            "flex items-start border-b border-gray-200 pb-4";
+          itemElement.innerHTML = `
+                    <img src="${item.image}" alt="${
+            item.name
+          }" class="w-16 h-16 object-contain rounded-md mr-4">
+                    <div class="flex-1">
+                        <h3 class="font-medium">${item.name}</h3>
+                        <p class="text-gray-500 text-sm">${
+                          item.description || ""
+                        }</p>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex items-center border border-gray-300 rounded-md">
+                                <button class="decrease-item px-2 py-1 text-gray-600" data-index="${index}">-</button>
+                                <span class="px-2 quantity">${
+                                  item.quantity
+                                }</span>
+                                <button class="increase-item px-2 py-1 text-gray-600" data-index="${index}">+</button>
+                            </div>
+                            <span class="font-medium item-price">R$ ${(
+                              item.price * item.quantity
+                            ).toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <button class="remove-item ml-2 text-red-500" data-index="${index}">
+                        <ion-icon name="trash-outline" class="w-5 h-5"></ion-icon>
+                    </button>
+                `;
+          cartContainer.appendChild(itemElement);
+
+          // Adiciona ao subtotal
+          subtotal += item.price * item.quantity;
+        });
+
+        // Atualiza os valores do subtotal
+        subtotalElement.textContent = `R$ ${subtotal.toFixed(2)}`;
+        summarySubtotal.textContent = `R$ ${subtotal.toFixed(2)}`;
+
+        // Atualiza o total (que agora inclui a lógica do frete)
+        updateTotal(subtotal);
+
+        // Adiciona listeners para os botões
+        addCartItemListeners();
+
+        // Carrega dados de entrega se existirem e mostra as seções relevantes
+        loadDeliveryData();
+
+        // Garante que as seções de pagamento e finalizar pedido apareçam se houver itens no carrinho
+        if (cartItems.length > 0) {
+          document.getElementById("payment-section").classList.remove("hidden");
+          document.getElementById("finish-order").classList.remove("hidden");
+        }
+      }
+
+      // Função para esconder seções quando o carrinho está vazio
+      function hideSectionsForEmptyCart() {
+        // Os campos de endereço agora sempre aparecem, então não os escondemos aqui.
+        document
+          .getElementById("delivery-fee-container")
+          .classList.add("hidden");
+        document.getElementById("payment-section").classList.add("hidden");
+        document.getElementById("finish-order").classList.add("hidden");
+        document
+          .getElementById("free-delivery-message")
+          .classList.add("hidden");
+      }
+
+      // Função para carregar dados de entrega salvos
+      function loadDeliveryData() {
+        document.getElementById("delivery-address").value =
+          deliveryData.address || "";
+        document.getElementById("address-number").value =
+          deliveryData.number || "";
+        document.getElementById("address-complement").value =
+          deliveryData.complement || "";
+
+        // Se o endereço principal estiver preenchido, exibe a taxa de entrega
+        if (deliveryData.address) {
+          document
+            .getElementById("delivery-fee-container")
+            .classList.remove("hidden");
+        }
+        // A seção de pagamento e finalizar pedido já são mostradas em loadCartItems
+        // se houver itens no carrinho.
+      }
+
+      // Função para salvar dados de entrega
+      function saveDeliveryData() {
+        localStorage.setItem("deliveryData", JSON.stringify(deliveryData));
+      }
+
+      // Função para atualizar o total e a taxa de entrega
+      function updateTotal(subtotal) {
+        let deliveryFee = FIXED_DELIVERY_FEE;
+        const deliveryFeeElement = document.getElementById("delivery-fee");
+        const summaryDelivery = document.getElementById("summary-delivery");
+        const totalElement = document.getElementById("total");
+        const freeDeliveryMessage = document.getElementById(
+          "free-delivery-message"
+        );
+        const deliveryFeeContainer = document.getElementById(
+          "delivery-fee-container"
+        );
+
+        if (subtotal >= FREE_DELIVERY_THRESHOLD) {
+          deliveryFee = 0;
+          freeDeliveryMessage.classList.remove("hidden");
+        } else {
+          freeDeliveryMessage.classList.add("hidden");
+        }
+
+        deliveryFeeElement.textContent = `R$ ${deliveryFee.toFixed(2)}`;
+        summaryDelivery.textContent = `R$ ${deliveryFee.toFixed(2)}`;
+
+        const total = subtotal + deliveryFee;
+        totalElement.textContent = `R$ ${total.toFixed(2)}`;
+
+        // Mostra a seção da taxa de entrega se o endereço principal estiver preenchido
+        // E o carrinho não estiver vazio
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+        if (deliveryData.address && cartItems.length > 0) {
+          deliveryFeeContainer.classList.remove("hidden");
+        } else {
+          deliveryFeeContainer.classList.add("hidden");
+        }
+      }
+
+      // Função para adicionar listeners aos botões do carrinho
+      function addCartItemListeners() {
+        document.querySelectorAll(".increase-item").forEach((button) => {
+          button.addEventListener("click", function () {
+            const index = this.getAttribute("data-index");
+            updateItemQuantity(index, 1);
+          });
+        });
+
+        document.querySelectorAll(".decrease-item").forEach((button) => {
+          button.addEventListener("click", function () {
+            const index = this.getAttribute("data-index");
+            updateItemQuantity(index, -1);
+          });
+        });
+
+        document.querySelectorAll(".remove-item").forEach((button) => {
+          button.addEventListener("click", function () {
+            const index = this.getAttribute("data-index");
+            removeItem(index);
+          });
+        });
+      }
+
+      // Função para atualizar a quantidade de um item
+      function updateItemQuantity(index, change) {
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+        const item = cartItems[index];
+
+        item.quantity += change;
+
+        if (item.quantity < 1) {
+          // Remove o item se a quantidade for menor que 1
+          cartItems.splice(index, 1);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cartItems));
+        loadCartItems(); // Recarrega para atualizar subtotal, total e frete
+      }
+
+      // Função para remover um item
+      function removeItem(index) {
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+        cartItems.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cartItems));
+        loadCartItems(); // Recarrega para atualizar subtotal, total e frete
+      }
+
+      // Função para finalizar pedido via WhatsApp
+      function finishOrder() {
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+        if (cartItems.length === 0) {
+          alert("Seu carrinho está vazio");
+          return;
+        }
+
+        // Validação para endereço completo e número
+        if (
+          !document.getElementById("delivery-address").value ||
+          !document.getElementById("address-number").value
+        ) {
+          alert(
+            "Por favor, preencha o endereço de entrega completo e o número."
+          );
+          return;
+        }
+
+        // Atualiza deliveryData com os valores atuais dos campos de input
+        deliveryData.address =
+          document.getElementById("delivery-address").value;
+        deliveryData.number = document.getElementById("address-number").value;
+        deliveryData.complement =
+          document.getElementById("address-complement").value;
+        saveDeliveryData(); // Salva antes de enviar
+
+        const paymentMethod = document.querySelector(
+          'input[name="payment"]:checked'
+        ).value;
+
+        // Monta a mensagem do pedido (formato de tabela de texto)
+        let message = "PEDIDO NA FARMÁCIA MULTIMEDIC\n\n";
+        message += "ITENS DO PEDIDO:\n";
+        message += "-------------------------------------------------\n";
+        message += "Item                     Qtd    Preço Total\n";
+        message += "-------------------------------------------------\n";
+
+        cartItems.forEach((item) => {
+          const itemName = item.name.padEnd(25).substring(0, 25); // Limita e preenche para alinhar
+          const itemQuantity = String(item.quantity).padEnd(6);
+          const itemTotalPrice = (item.price * item.quantity)
+            .toFixed(2)
+            .replace(".", ","); // Formato brasileiro
+          message += `${itemName}${itemQuantity}R$ ${itemTotalPrice}\n`;
+        });
+
+        message += "-------------------------------------------------\n";
+
+        const subtotal = document.getElementById("subtotal").textContent;
+        const deliveryFeeText =
+          document.getElementById("delivery-fee").textContent;
+        const total = document.getElementById("total").textContent;
+        const isFreeDelivery =
+          parseFloat(deliveryFeeText.replace("R$ ", "").replace(",", ".")) ===
+          0;
+
+        message += `Subtotal:              ${subtotal}\n`;
+        message += `Taxa de entrega:       ${
+          isFreeDelivery ? "Frete Grátis!" : deliveryFeeText
+        }\n`;
+        message += `TOTAL GERAL:           ${total}\n`;
+
+        message += `\nFORMA DE PAGAMENTO: ${paymentMethod}\n`;
+
+        message += `\nENDEREÇO DE ENTREGA:\n`;
+        message += `  ${deliveryData.address}, ${deliveryData.number}`;
+        if (deliveryData.complement) message += ` - ${deliveryData.complement}`;
+        message += `\n\nPor favor, confirme o pedido e informe o tempo estimado para entrega.`;
+
+        // Codifica a mensagem para URL
+        const whatsappNumber = "5581991152307";
+        const encodedMessage = encodeURIComponent(message);
+
+        // Abre o WhatsApp com a mensagem
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
+          "_blank"
+        );
+
+        // Limpa o carrinho e dados de entrega após o envio
+        localStorage.removeItem("cart");
+        localStorage.removeItem("deliveryData");
+        deliveryData = { address: "", number: "", complement: "" }; // Zera os dados em memória também
+
+        // Recarrega a página para limpar tudo visualmente
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+
+      // Carrega os itens do carrinho quando a página é carregada
+      document.addEventListener("DOMContentLoaded", function () {
+        loadCartItems();
+
+        // Adiciona listeners para os campos de endereço para salvar mudanças em tempo real
+        document
+          .getElementById("delivery-address")
+          .addEventListener("input", function () {
+            deliveryData.address = this.value;
+            saveDeliveryData();
+            // Atualiza a visibilidade da taxa de entrega assim que o endereço principal é digitado
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            if (deliveryData.address && cartItems.length > 0) {
+              document
+                .getElementById("delivery-fee-container")
+                .classList.remove("hidden");
+            } else {
+              document
+                .getElementById("delivery-fee-container")
+                .classList.add("hidden");
+            }
+          });
+        document
+          .getElementById("address-number")
+          .addEventListener("input", function () {
+            deliveryData.number = this.value;
+            saveDeliveryData();
+          });
+        document
+          .getElementById("address-complement")
+          .addEventListener("input", function () {
+            deliveryData.complement = this.value;
+            saveDeliveryData();
+          });
+
+        // Adiciona listener para o botão de finalizar pedido
+        document
+          .getElementById("finish-order")
+          .addEventListener("click", finishOrder);
+      });
+    </script>
+  </body>
+</html>
