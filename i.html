@@ -165,10 +165,14 @@
     @media (min-width: 1024px) {
       body {
         padding-bottom: 0; /* Remove o espaço do menu inferior no desktop */
+        padding-left: 80px; /* Espaço para o menu lateral esquerdo */
+        padding-right: 80px; /* Espaço para o menu lateral direito */
       }
 
       .desktop-shell {
         max-width: 56rem;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .site-header {
@@ -180,6 +184,12 @@
       .site-header .header-logo {
         width: 4rem;
         height: 4rem;
+      }
+
+      /* Aumento da fonte do texto do header no desktop */
+      .site-header .header-text {
+        font-size: 1.25rem;
+        line-height: 1.5;
       }
 
       .carousel-container {
@@ -221,6 +231,79 @@
 
       .section-spacing {
         margin-top: 1.25rem;
+      }
+
+      /* ===== MENU LATERAL ESQUERDO - CATEGORIAS ===== */
+      .categories-sidebar {
+        position: fixed;
+        left: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: auto;
+        height: auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.75rem 0.5rem;
+        gap: 0.5rem;
+        border: 1px solid #e5e7eb;
+        z-index: 999;
+      }
+
+      .categories-sidebar .category-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem 0.3rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        color: #6b7280;
+        text-decoration: none;
+        gap: 0.15rem;
+        cursor: pointer;
+      }
+
+      .categories-sidebar .category-item:hover {
+        background-color: #f3f4f6;
+        color: #1a237e;
+      }
+
+      .categories-sidebar .category-item:active {
+        transform: scale(0.95);
+      }
+
+      .categories-sidebar .category-item .cat-icon {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+
+      .categories-sidebar .category-item .cat-label {
+        font-size: 0.55rem;
+        font-weight: 500;
+        text-align: center;
+        line-height: 1.2;
+        max-width: 50px;
+        color: inherit;
+      }
+
+      .categories-sidebar .category-item.active {
+        color: #1a237e;
+      }
+
+      .categories-sidebar .category-item.active .cat-label {
+        color: #1a237e;
+      }
+
+      .categories-sidebar .divider {
+        width: 70%;
+        height: 1px;
+        background: #e5e7eb;
+        margin: 0.1rem 0;
       }
 
       /* ===== MENU VERTICAL À DIREITA ===== */
@@ -295,12 +378,37 @@
         background: #e5e7eb;
         margin: 0.1rem 0;
       }
+
+      /* Esconde a seção de categorias do conteúdo principal no desktop */
+      #secao-categorias {
+        display: none;
+      }
     }
 
     /* Ajuste para telas muito grandes */
     @media (min-width: 1280px) {
       .carousel-container {
         height: 200px;
+      }
+
+      body {
+        padding-left: 100px;
+        padding-right: 100px;
+      }
+
+      .categories-sidebar {
+        left: 2.5rem;
+        padding: 1rem 0.6rem;
+        gap: 0.75rem;
+      }
+
+      .categories-sidebar .category-item .cat-icon {
+        width: 28px;
+        height: 28px;
+      }
+
+      .categories-sidebar .category-item .cat-label {
+        font-size: 0.65rem;
       }
 
       .bottom-nav {
@@ -317,10 +425,23 @@
       .bottom-nav a .nav-label {
         font-size: 0.7rem;
       }
+
+      /* Aumento adicional da fonte em telas muito grandes */
+      .site-header .header-text {
+        font-size: 1.5rem;
+      }
     }
 
-    /* Ajuste para telas pequenas (mobile) - mantém o menu horizontal */
+    /* Ajuste para telas pequenas (mobile) - mantém o menu horizontal e categorias visíveis */
     @media (max-width: 1023px) {
+      .categories-sidebar {
+        display: none !important;
+      }
+
+      #secao-categorias {
+        display: block !important;
+      }
+
       .bottom-nav {
         position: fixed;
         bottom: 0;
@@ -382,7 +503,7 @@
       <div class="flex items-center shrink-0">
         <img src="./image/logofarma.png" alt="Farmácia Multimedic" class="header-logo w-10 h-10 md:w-12 md:h-12" />
       </div>
-      <p class="text-blue-700 text-sm md:text-base text-center flex-1 px-2 truncate">
+      <p class="header-text text-blue-700 text-sm md:text-base text-center flex-1 px-2 truncate">
         <span class="font-semibold">Bem-vindo a sua farmácia...</span>
       </p>
       <div class="flex items-center gap-2 shrink-0">
@@ -542,7 +663,7 @@
       </div>
     </section>
 
-    <!-- Seção de categorias -->
+    <!-- Seção de categorias (visível apenas em mobile) -->
     <section id="secao-categorias" class="container-padding section-spacing">
       <div class="flex justify-between items-center mb-3">
         <h2 class="text-lg md:text-xl lg:text-xl font-bold text-[#1a237e]">Categorias</h2>
@@ -588,7 +709,36 @@
 
   </main>
 
-  <!-- Menu inferior (MODIFICADO: vertical à direita no desktop) -->
+  <!-- Menu lateral esquerdo - Categorias (apenas desktop) -->
+  <nav class="categories-sidebar">
+    <a href="medicamentos.html" class="category-item active">
+      <img src="https://img.icons8.com/ios-filled/40/1a237e/pill.png" alt="Medicamentos" class="cat-icon">
+      <span class="cat-label">Remédios</span>
+    </a>
+    
+    <div class="divider"></div>
+    
+    <a href="beleza.html" class="category-item">
+      <img src="https://img.icons8.com/ios-filled/40/1a237e/lipstick.png" alt="Beleza" class="cat-icon">
+      <span class="cat-label">Beleza</span>
+    </a>
+    
+    <div class="divider"></div>
+    
+    <a href="bebes.html" class="category-item">
+      <img src="https://img.icons8.com/ios-filled/40/1a237e/baby.png" alt="Bebês" class="cat-icon">
+      <span class="cat-label">Bebês</span>
+    </a>
+    
+    <div class="divider"></div>
+    
+    <a href="saude.html" class="category-item">
+      <img src="https://img.icons8.com/ios-filled/40/1a237e/heart-health.png" alt="Saúde" class="cat-icon">
+      <span class="cat-label">Saúde</span>
+    </a>
+  </nav>
+
+  <!-- Menu inferior (vertical à direita no desktop) -->
   <nav class="bottom-nav">
     <a href="i.html" class="active">
       <ion-icon name="home-outline" class="nav-icon"></ion-icon>
@@ -597,12 +747,12 @@
     
     <div class="divider"></div>
     
-    <a href="#secao-categorias">
+    <a href="#secao-categorias" class="mobile-only">
       <ion-icon name="apps-outline" class="nav-icon"></ion-icon>
       <span class="nav-label">Categorias</span>
     </a>
     
-    <div class="divider"></div>
+    <div class="divider mobile-only"></div>
     
     <a href="contato.html">
       <ion-icon name="call-outline" class="nav-icon"></ion-icon>
@@ -673,12 +823,34 @@
     atualizarStatusHorario();
 
     // Marcar link ativo no menu
-    document.querySelectorAll('.bottom-nav a').forEach(link => {
+    document.querySelectorAll('.bottom-nav a, .categories-sidebar a').forEach(link => {
       link.addEventListener('click', function(e) {
-        document.querySelectorAll('.bottom-nav a').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
+        // Remove active de todos os links do mesmo menu
+        const parent = this.closest('.bottom-nav') || this.closest('.categories-sidebar');
+        if (parent) {
+          parent.querySelectorAll('a').forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        }
       });
     });
+
+    // Esconder link de categorias no menu direito em desktop
+    function ajustarMenu() {
+      const isDesktop = window.innerWidth >= 1024;
+      const categoriasLink = document.querySelector('.bottom-nav a[href="#secao-categorias"]');
+      const categoriasDivider = document.querySelector('.bottom-nav .divider.mobile-only');
+      
+      if (categoriasLink) {
+        categoriasLink.style.display = isDesktop ? 'none' : 'flex';
+      }
+      if (categoriasDivider) {
+        categoriasDivider.style.display = isDesktop ? 'none' : 'block';
+      }
+    }
+
+    // Executar no carregamento e no redimensionamento
+    ajustarMenu();
+    window.addEventListener('resize', ajustarMenu);
   </script>
 
 </body>
