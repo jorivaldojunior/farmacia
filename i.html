@@ -18,45 +18,79 @@
       display: none;
     }
 
-    /* Carrossel responsivo */
+    /* Carrossel responsivo - CORRIGIDO */
     .carousel-container {
       position: relative;
       width: 100%;
       overflow: hidden;
       border-radius: 12px;
-      height: 160px;
       margin: 0 auto;
       max-width: 1200px;
+      /* Altura definida por proporção de aspecto */
+      aspect-ratio: 16 / 5;
+      background-color: #f3f4f6;
     }
     
     @media (min-width: 640px) {
       .carousel-container {
-        height: 200px;
+        aspect-ratio: 16 / 4.5;
       }
     }
     
     @media (min-width: 768px) {
       .carousel-container {
-        height: 250px;
+        aspect-ratio: 16 / 4;
       }
     }
 
+    @media (min-width: 1024px) {
+      .carousel-container {
+        aspect-ratio: 16 / 3.5;
+        max-width: 100%;
+        border-radius: 12px;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .carousel-container {
+        aspect-ratio: 16 / 3.2;
+      }
+    }
 
     .carousel {
       display: flex;
       transition: transform 0.5s ease-in-out;
       height: 100%;
+      width: 100%;
     }
 
     .carousel-item {
       min-width: 100%;
       height: 100%;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
     }
 
     .carousel-item img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain; /* Muda de cover para contain para não cortar */
+      object-position: center;
+      background-color: #f3f4f6;
+    }
+
+    /* Fallback para imagens que precisam de preenchimento */
+    .carousel-item .img-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a237e, #283593);
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
     /* Espaço para o menu inferior */
@@ -164,9 +198,9 @@
     /* Desktop (1024px+) — mobile permanece igual */
     @media (min-width: 1024px) {
       body {
-        padding-bottom: 0; /* Remove o espaço do menu inferior no desktop */
-        padding-left: 80px; /* Espaço para o menu lateral esquerdo */
-        padding-right: 80px; /* Espaço para o menu lateral direito */
+        padding-bottom: 0;
+        padding-left: 80px;
+        padding-right: 80px;
       }
 
       .desktop-shell {
@@ -190,12 +224,6 @@
       .site-header .header-text {
         font-size: 1.25rem;
         line-height: 1.5;
-      }
-
-      .carousel-container {
-        height: 180px;
-        max-width: 100%;
-        border-radius: 12px;
       }
 
       .banner-section {
@@ -387,10 +415,6 @@
 
     /* Ajuste para telas muito grandes */
     @media (min-width: 1280px) {
-      .carousel-container {
-        height: 200px;
-      }
-
       body {
         padding-left: 100px;
         padding-right: 100px;
@@ -526,13 +550,13 @@
       <div class="carousel-container shadow-lg">
         <div id="banner-carousel" class="carousel">
           <div class="carousel-item">
-            <img src="./image/banner5.png" alt="Promoção 1" class="w-full h-full" />
+            <img src="./image/banner5.png" alt="Promoção 1" />
           </div>
           <div class="carousel-item">
-            <img src="./image/promoçao1.jpg" alt="Promoção 2" class="w-full h-full" />
+            <img src="./image/promoçao1.jpg" alt="Promoção 2" />
           </div>
           <div class="carousel-item">
-            <img src="./image/promoçao.jpg" alt="Promoção 3" class="w-full h-full" />
+            <img src="./image/promoçao.jpg" alt="Promoção 3" />
           </div>
         </div>
         <div id="banner-indicators" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
