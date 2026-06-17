@@ -129,13 +129,36 @@
       }
     }
 
-    .time-plate {
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      margin: 0 auto;
-      max-width: 600px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    .status-badge {
+      border-radius: 9999px;
+      padding: 0.35rem 0.65rem;
+      text-align: right;
+      line-height: 1.2;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      white-space: nowrap;
+      background-color: #34d399;
+      color: #fff;
+    }
+
+    .status-badge .status-hours {
+      display: none;
+    }
+
+    @media (min-width: 480px) {
+      .status-badge .status-hours {
+        display: block;
+        font-size: 0.65rem;
+        opacity: 0.92;
+        margin-top: 1px;
+      }
+    }
+
+    .banner-section {
+      margin-top: 0.5rem;
+    }
+
+    .products-first {
+      margin-top: 1rem;
     }
 
     /* Desktop (1024px+) — mobile permanece igual */
@@ -159,9 +182,17 @@
       }
 
       .carousel-container {
-        height: 220px;
+        height: 180px;
         max-width: 100%;
         border-radius: 12px;
+      }
+
+      .banner-section {
+        margin-top: 0.625rem;
+      }
+
+      .products-first {
+        margin-top: 0.75rem;
       }
 
       .product-scroll {
@@ -182,18 +213,9 @@
         padding: 0.75rem;
       }
 
-      .time-plate {
-        padding: 10px 16px;
-        max-width: 520px;
-      }
-
-      .time-plate p {
-        font-size: 0.95rem;
-      }
-
-      .status-bar {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+      .status-badge {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
       }
 
       .bottom-nav {
@@ -214,13 +236,13 @@
       }
 
       .section-spacing {
-        margin-top: 1.5rem;
+        margin-top: 1.25rem;
       }
     }
 
     @media (min-width: 1280px) {
       .carousel-container {
-        height: 240px;
+        height: 200px;
       }
     }
   </style>
@@ -229,35 +251,30 @@
 
   <!-- Cabeçalho -->
   <header class="site-header bg-white p-4 shadow-md sticky top-0 z-50">
-    <div class="desktop-shell max-w-6xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-2">
+    <div class="desktop-shell max-w-6xl mx-auto flex justify-between items-center gap-2">
+      <div class="flex items-center shrink-0">
         <img src="./image/logofarma.png" alt="Farmácia Multimedic" class="header-logo w-10 h-10 md:w-12 md:h-12" />
       </div>
-      <p class="text-blue-700 text-sm md:text-base"><span class="font-semibold">Bem-vindo a sua farmácia... </span></p>
-      <a href="#" class="flex flex-col items-center text-blue-700">
-      <ion-icon name="person-outline" class="w-6 h-6"></ion-icon>
-     
-    </a>
-     
-    </div>
-  </header>
-
-  <!-- Placa de horário -->
-  <div class="bg-white shadow status-bar">
-    <div class="desktop-shell max-w-6xl mx-auto px-4 py-3">
-      <div class="time-plate" id="statusHorario">
-        <p class="text-lg font-medium">Funcionamento: <span class="font-bold">08:00 às 23:00</span></p>
-        <p class="text-sm">Domingo a Domingo</p>
+      <p class="text-blue-700 text-sm md:text-base text-center flex-1 px-2 truncate">
+        <span class="font-semibold">Bem-vindo a sua farmácia...</span>
+      </p>
+      <div class="flex items-center gap-2 shrink-0">
+        <div id="statusHorario" class="status-badge text-xs sm:text-sm">
+          <span class="font-bold">Aberto agora</span>
+          <span class="status-hours">Dom–Dom, 08h às 23h</span>
+        </div>
+        <a href="#" class="flex flex-col items-center text-blue-700">
+          <ion-icon name="person-outline" class="w-6 h-6"></ion-icon>
+        </a>
       </div>
     </div>
-  </div>
-
+  </header>
 
   <!-- Conteúdo principal -->
   <main class="desktop-shell max-w-6xl mx-auto">
 
     <!-- Carrossel de banners -->
-    <section class="container-padding section-spacing">
+    <section class="container-padding banner-section">
       <div class="carousel-container shadow-lg">
         <div id="banner-carousel" class="carousel">
           <div class="carousel-item">
@@ -279,7 +296,7 @@
     </section>
 
     <!-- Seção Destaques -->
-    <section class="container-padding section-spacing">
+    <section class="container-padding products-first">
       <div class="flex justify-between items-center mb-3">
         <h2 class="text-lg md:text-xl lg:text-xl font-bold text-[#1a237e]">Destaques</h2>
         <a href="#" class="text-[#e53935] text-sm md:text-base font-medium flex items-center">
@@ -514,10 +531,8 @@
       const placa = document.getElementById('statusHorario');
 
       placa.innerHTML = `
-        <p class="text-lg font-medium">
         <span class="font-bold">${aberto ? 'Aberto agora' : 'Fechado no momento'}</span>
-        </p>
-        <p class="text-sm">Domingo a Domingo, das 08h às 23h</p>
+        <span class="status-hours">Dom–Dom, 08h às 23h</span>
       `;
       placa.style.backgroundColor = aberto ? '#34d399' : '#ef4444';
       placa.style.color = '#fff';
